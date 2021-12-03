@@ -1,8 +1,9 @@
 # command
 
+`localhost:3000/document`で API の仕様が確認できます
+
 ```bash
 yarn start:dev # watch mode
-
 
 # controllerとか生やすとき(もうあんまないけど)
 yarn nest g controller hoge

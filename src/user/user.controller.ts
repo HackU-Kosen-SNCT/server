@@ -1,4 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Patch } from '@nestjs/common';
 
 @Controller('user')
-export class UserController {}
+export class UserController {
+  @Patch('/category')
+  updateCategory() {
+    return '';
+  }
+}

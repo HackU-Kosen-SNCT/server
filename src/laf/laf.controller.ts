@@ -1,9 +1,24 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
 @Controller('laf')
 export class LafController {
   @Get()
-  hello() {
-    return 'Hello World';
+  getLafItems() {
+    return '';
+  }
+
+  @Post()
+  createLafItem() {
+    return '';
+  }
+
+  @Post('/registrant')
+  registrant() {
+    return '';
+  }
+
+  @Post('/receive')
+  receive() {
+    return '';
   }
 }
