@@ -22,6 +22,7 @@ services:
       - net
     volumes:
       - db:/var/lib/mysql
+      - ./sql:/sql
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     ports:
       - 3306:3306

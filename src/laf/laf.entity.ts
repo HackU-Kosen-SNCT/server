@@ -12,8 +12,8 @@ export class Laf extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: ['valuables', 'stationery', 'clothing', 'others', 'unset'],
-    default: 'unset',
+    enum: ['valuables', 'stationery', 'clothing', 'others'],
+    default: 'others',
   })
   category: Category;
 
