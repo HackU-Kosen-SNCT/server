@@ -1,13 +1,35 @@
-# command
+# メンバー向け
 
-`localhost:3000/document`で API の仕様が確認できます
+## 最初のステップ
+
+1. env ファイル等が必要なので、その辺りを要求してください。
+
+   - ルートに`.envfiles`ディレクトリを作ってその中にもらった`default.env`,`development.env`, `production.env`を置きます。
+
+2. 以下のコマンドを実行します
 
 ```bash
-yarn start:dev # watch mode
-
-# controllerとか生やすとき(もうあんまないけど)
-yarn nest g controller hoge
+docker compose up -d
 ```
+
+- ここで`localhost:3000/laf`にアクセスして`{"items": []}`が返って来れば正常に動作しています。
+- また`localhost:3000/document`で API の仕様が確認できます
+
+3. データベースへ仮データを投入
+
+```bash
+docker compose exec database /bin/sh
+mysql -u user -p
+# ここでパスワードを入力(default.envのDB_PASSWORD)
+
+# ログインできたら以下のコマンドも叩きます
+use app;
+source /sql/user.sql
+source /sql/laf.sql
+```
+
+- ここでもう一度`localhost:3000/laf`にアクセスすると今度は空配列ではなくちゃんとしたデータが返ってくると思います。(API が実装されていれば)
+- 2 回目以降は`docker compose up -d`のみで構いません
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
