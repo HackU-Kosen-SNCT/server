@@ -10,6 +10,10 @@
 
 ```bash
 docker compose up -d
+
+# どちらでもいいが、別のターミナルで起動しておくことをおすすめする
+# contaienr_idはdocker psから確認する
+docker logs {container_id} -f
 ```
 
 - ここで`localhost:3000/laf`にアクセスして`{"items": []}`が返って来れば正常に動作しています。

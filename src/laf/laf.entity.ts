@@ -1,8 +1,8 @@
-import { Category } from 'src/category.type';
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { ItemCategory } from 'src/category.type';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class Laf extends BaseEntity {
+export class Laf {
   @PrimaryColumn('varchar', { length: 20 })
   readonly item_id: string;
 
@@ -15,7 +15,7 @@ export class Laf extends BaseEntity {
     enum: ['valuables', 'stationery', 'clothing', 'others'],
     default: 'others',
   })
-  category: Category;
+  category: ItemCategory;
 
   @Column('varchar', { length: 255, nullable: true })
   detail: string;
@@ -37,4 +37,25 @@ export class Laf extends BaseEntity {
 
   @Column('datetime', { nullable: true })
   received_at: Date;
+
+  constructor(
+    item_id: string,
+    category: ItemCategory,
+    latitude: number,
+    longitude: number,
+    image_url: string,
+    created_at: Date,
+    detail?: string,
+  ) {
+    this.item_id = item_id;
+    this.registrant = null;
+    this.category = category;
+    this.detail = detail;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.image_url = image_url;
+    this.message = null;
+    this.created_at = created_at;
+    this.received_at = null;
+  }
 }

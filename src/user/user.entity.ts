@@ -1,4 +1,4 @@
-import { Category } from 'src/category.type';
+import { UserCategory } from 'src/category.type';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -11,5 +11,5 @@ export class User extends BaseEntity {
     enum: ['valuables', 'stationery', 'clothing', 'others', 'unset'],
     default: 'unset',
   })
-  searching_category: Category;
+  searching_category: UserCategory;
 }
