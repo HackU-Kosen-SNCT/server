@@ -3,11 +3,11 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Laf extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryColumn('varchar', { length: 20 })
   readonly item_id: string;
 
   // lengthはlineのuser_id依存
-  @Column('varchar', { length: 100, nullable: true })
+  @Column('varchar', { length: 255, nullable: true })
   registrant: string;
 
   @Column({
@@ -17,7 +17,7 @@ export class Laf extends BaseEntity {
   })
   category: Category;
 
-  @Column('varchar', { length: 100, nullable: true })
+  @Column('varchar', { length: 255, nullable: true })
   detail: string;
 
   @Column('double')
@@ -26,10 +26,10 @@ export class Laf extends BaseEntity {
   @Column('double')
   longitude: number;
 
-  @Column('varchar', { length: 100 })
+  @Column('text')
   image_url: string;
 
-  @Column('varchar', { length: 140, nullable: true })
+  @Column('varchar', { length: 255, nullable: true })
   message: string;
 
   @Column('datetime')
