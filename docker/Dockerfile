@@ -9,5 +9,3 @@ RUN apk add --no-cache make gcc g++ python3 && \
   apk del make gcc g++ python3
 
 COPY . .
-
-CMD ["yarn", "start:dev"]

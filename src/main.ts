@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -5,6 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // swagger
   const options = new DocumentBuilder()
     .setTitle('api document')
     .setDescription('API仕様書だよ~')
@@ -13,6 +15,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('document', app, document);
 
-  await app.listen(3000);
+  // config
+  const configService = new ConfigService();
+  const sync = configService.get('DB_SYNC');
+  console.log(`TypeORM synchronize is [ ${sync} ]`);
+
+  await app.listen(3001);
 }
 bootstrap();

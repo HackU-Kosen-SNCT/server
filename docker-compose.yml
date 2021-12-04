@@ -12,16 +12,8 @@ services:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${BACKEND_PORT}:${BACKEND_INNER_PORT}
-    command: sh -c 'yarn install && yarn start:dev'
-    environment:
-      MYSQL_HOST: database
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE_NAME: ${MYSQL_DATABASE}
-      MYSQL_PORT: ${MYSQL_PORT}
-      BACKEND_PORT: ${BACKEND_PORT}
-      BACKEND_INNER_PORT: ${BACKEND_INNER_PORT}
+      - 3000:3001
+    command: sh -c 'yarn install && NODE_ENV=development yarn start:dev'
 
   database:
     container_name: database
@@ -32,10 +24,12 @@ services:
       - db:/var/lib/mysql
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     ports:
-      - ${MYSQL_PORT}:3306
+      - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
 
 networks:
   net:
