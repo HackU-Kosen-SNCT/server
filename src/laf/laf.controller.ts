@@ -1,10 +1,17 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { GetLafItemsResponse } from './laf.dto';
 
 @Controller('laf')
 export class LafController {
   @Get()
-  getLafItems() {
-    return '';
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: GetLafItemsResponse,
+    description: '落とし物を全件取得するAPI',
+  })
+  getLafItems(): GetLafItemsResponse {
+    return { items: [] };
   }
 
   @Post()
