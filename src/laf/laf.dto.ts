@@ -29,12 +29,50 @@ export class LafItem {
 }
 
 export class GetLafItemsResponse {
-  @ApiProperty({ type: [LafItem] })
+  @ApiProperty({
+    type: [LafItem],
+    example: [
+      {
+        item_id: '20211201152512300',
+        category: 'others',
+        detail: null,
+        latitude: 36.82722,
+        longitude: 84.28292,
+        image_url:
+          'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+        created_at: '2021-12-01 15:25:12',
+      },
+      {
+        item_id: '20211205170917500',
+        category: 'clothing',
+        detail: 'スポーツタオル',
+        latitude: 82.28422,
+        longitude: 78.28292,
+        image_url:
+          'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+        created_at: '2021-12-05 17:09:17',
+      },
+    ],
+  })
   items: LafItem[];
 }
 
 export class PostLafItemResponse {
-  @ApiProperty({ type: LafItem })
+  @ApiProperty({
+    type: LafItem,
+    example: [
+      {
+        item_id: '20211205170917500',
+        category: 'clothing',
+        detail: 'スポーツタオル',
+        latitude: 82.28422,
+        longitude: 78.28292,
+        image_url:
+          'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+        created_at: '2021-12-05 17:09:17',
+      },
+    ],
+  })
   item: LafItem;
 }
 
