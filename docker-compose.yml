@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  server:
+    container_name: server
+    build:
+      context: ./docker
+    networks:
+      - net
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3001
+    command: sh -c 'yarn install && NODE_ENV=development yarn start:dev'
+
+  database:
+    container_name: database
+    image: mariadb:10.7.1
+    networks:
+      - net
+    volumes:
+      - db:/var/lib/mysql
+      - ./sql:/sql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+
+networks:
+  net:
+
+volumes:
+  db:
