@@ -3,8 +3,10 @@ import { ApiResponse } from '@nestjs/swagger';
 import {
   GetLafItemsResponse,
   LafItem,
-  LafItemPropertyDto,
+  CreateLafItemDto,
   PostLafItemResponse,
+  RegistrantDto,
+  ReceiveDto,
 } from './laf.dto';
 import { LafService } from './laf.service';
 
@@ -33,10 +35,8 @@ export class LafController {
     type: PostLafItemResponse,
     description: '落とし物を登録するAPI',
   })
-  createLafItem(
-    @Body() lafItemPropertyDto: LafItemPropertyDto,
-  ): Promise<LafItem> {
-    return this.lafService.createLafItem(lafItemPropertyDto);
+  createLafItem(@Body() createLafItemDto: CreateLafItemDto): Promise<LafItem> {
+    return this.lafService.createLafItem(createLafItemDto);
   }
 
   @Patch('/registrant')
@@ -44,8 +44,9 @@ export class LafController {
     status: HttpStatus.NO_CONTENT,
     description: '登録者を設定するAPI',
   })
-  registrant() {
-    return '';
+  registrant(@Body() registrantDto: RegistrantDto) {
+    // TODO: registrant(LINEのuser_id)の値が存在するかのチェックもいるかも
+    this.lafService.registrant(registrantDto);
   }
 
   @Patch('/receive')
@@ -53,7 +54,7 @@ export class LafController {
     status: HttpStatus.NO_CONTENT,
     description: 'メッセージの送信、受け取りの確認を行うAPI',
   })
-  receive() {
-    return '';
+  receive(@Body() receiveDto: ReceiveDto) {
+    this.lafService.receive(receiveDto);
   }
 }

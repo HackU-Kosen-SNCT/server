@@ -76,7 +76,7 @@ export class PostLafItemResponse {
   item: LafItem;
 }
 
-export class LafItemPropertyDto {
+export class CreateLafItemDto {
   @ApiProperty()
   @IsNotEmpty()
   item_id: string;
@@ -103,4 +103,28 @@ export class LafItemPropertyDto {
   @ApiProperty()
   @IsNotEmpty()
   created_at: Date;
+}
+
+export class RegistrantDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  item_id: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  registrant: string;
+}
+
+export class ReceiveDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  item_id: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  message: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  received_at: Date;
 }
