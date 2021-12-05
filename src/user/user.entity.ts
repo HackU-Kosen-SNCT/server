@@ -1,4 +1,4 @@
-import { UserCategory } from 'src/category.type';
+import { UserCategory } from './user.dto';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()

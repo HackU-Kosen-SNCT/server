@@ -1,4 +1,4 @@
-import { ItemCategory } from 'src/category.type';
+import { ItemCategory } from './laf.dto';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()

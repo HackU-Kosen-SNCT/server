@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { UserCategory } from 'src/category.type';
+
+// ユーザーが設定できるカテゴリ
+export type UserCategory =
+  | 'valuables'
+  | 'stationery'
+  | 'clothing'
+  | 'others'
+  | 'unset';
 
 export class UpdateCategoryDto {
   @ApiProperty()
