@@ -4,7 +4,7 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity()
 export class User extends BaseEntity {
   @PrimaryColumn('varchar', { length: 255 })
-  readonly user_id: string;
+  readonly registrant: string;
 
   @Column({
     type: 'enum',
