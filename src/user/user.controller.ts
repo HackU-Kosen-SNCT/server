@@ -1,4 +1,4 @@
-import { Body, Controller, Patch } from '@nestjs/common';
+import { Body, Controller, NotFoundException, Patch } from '@nestjs/common';
 import { UpdateCategoryDto } from './user.dto';
 import { UserService } from './user.service';
 
@@ -7,7 +7,11 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Patch('/category')
-  updateCategory(@Body() updateCategoryDto: UpdateCategoryDto) {
-    this.userService.updateCategory(updateCategoryDto);
+  async updateCategory(@Body() updateCategoryDto: UpdateCategoryDto) {
+    const user = await this.userService.updateCategory(updateCategoryDto);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 }

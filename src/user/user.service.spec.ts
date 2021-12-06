@@ -29,15 +29,16 @@ describe('UserService', () => {
   });
 
   describe('updateCategory', () => {
+    const mockUpdateCategoryDto: UpdateCategoryDto = {
+      registrant: 'i8sj289g',
+      searching_category: 'unset',
+    };
     it('update category', async () => {
       // others -> unsetになることを確認する
-      const mockUpdateCategoryDto: UpdateCategoryDto = {
-        registrant: 'i8sj289g',
-        searching_category: 'unset',
-      };
 
       // 返す値の定義
       service.getUserByRegistrant = jest.fn().mockResolvedValue({
+        registrant: 'i8sj289g',
         searching_category: 'others',
       });
 
@@ -52,6 +53,19 @@ describe('UserService', () => {
       expect(result.searching_category).toEqual(
         mockUpdateCategoryDto.searching_category,
       );
+    });
+
+    it(`can't update category`, async () => {
+      // そのようなユーザー(registrant)が存在しない場合のテスト
+      service.getUserByRegistrant = jest.fn().mockResolvedValue(undefined);
+
+      expect(service.getUserByRegistrant).not.toHaveBeenCalled();
+
+      const result = await service.updateCategory(mockUpdateCategoryDto);
+
+      expect(service.getUserByRegistrant).toHaveBeenCalled();
+      expect(repository.save).not.toHaveBeenCalled();
+      expect(result).toEqual(undefined);
     });
   });
 });
