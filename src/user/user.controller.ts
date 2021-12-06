@@ -1,6 +1,6 @@
 import { Body, Controller, NotFoundException, Patch } from '@nestjs/common';
 import { UserCategoryPipe } from './user-category.pipe';
-import { UserCategory } from './user.dto';
+import { UpdateCategoryDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -9,14 +9,10 @@ export class UserController {
 
   @Patch('/category')
   async updateCategory(
-    @Body() registrant: string,
-    @Body('searching_category', UserCategoryPipe)
-    searching_category: UserCategory,
+    @Body(UserCategoryPipe)
+    updateCategoryDto: UpdateCategoryDto,
   ) {
-    const user = await this.userService.updateCategory({
-      registrant,
-      searching_category,
-    });
+    const user = await this.userService.updateCategory(updateCategoryDto);
     if (!user) {
       throw new NotFoundException();
     }

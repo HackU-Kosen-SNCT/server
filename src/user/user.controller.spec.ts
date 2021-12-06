@@ -34,10 +34,7 @@ describe('UserController', () => {
       });
 
       expect(service.updateCategory).not.toHaveBeenCalled();
-      const result = await controller.updateCategory(
-        mockUpdateCategoryDto.registrant,
-        mockUpdateCategoryDto.searching_category,
-      );
+      const result = await controller.updateCategory(mockUpdateCategoryDto);
 
       expect(service.updateCategory).toHaveBeenCalled();
       expect(result).toEqual(mockUpdateCategoryDto);
