@@ -17,14 +17,14 @@ export class UserController {
   @Patch('/category')
   @ApiOperation({ summary: 'ユーザーの探しているもののカテゴリを変更するAPI' })
   @ApiParam({
-    name: 'registrant',
-    required: true,
-    description: 'ユーザーのID',
-  })
-  @ApiParam({
     name: 'searching_category',
     required: true,
     description: 'ユーザーが登録できるカテゴリ',
+  })
+  @ApiParam({
+    name: 'registrant',
+    required: true,
+    description: 'ユーザーのID',
   })
   @ApiOkResponse({
     description: '成功時処理',
