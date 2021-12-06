@@ -1,4 +1,5 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
+import { UserCategory } from './user.dto';
 
 export class UserCategoryPipe implements PipeTransform {
   readonly allowCategories = [
@@ -9,12 +10,13 @@ export class UserCategoryPipe implements PipeTransform {
     'unset',
   ];
 
-  transform(value: string) {
-    value = value.toLowerCase();
+  transform(value: UserCategory) {
+    const searching_category = value.toLowerCase();
 
-    if (!this.isCategoryValid(value)) {
+    if (!this.isCategoryValid(searching_category)) {
       throw new BadRequestException();
     }
+    return searching_category;
   }
 
   private isCategoryValid(category: string) {
