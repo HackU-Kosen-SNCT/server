@@ -22,6 +22,14 @@ export class LafService {
       created_at,
       detail,
     } = createLafItemDto;
+
+    // 既にitem_idが同じものがあるかどうか
+    const isExistsItem = await this.lafRepository.findOne(item_id);
+    if (isExistsItem) {
+      // 同じものがあった場合
+      return;
+    }
+
     const item = new Laf(
       item_id,
       category,
@@ -32,12 +40,7 @@ export class LafService {
       detail,
     );
 
-    try {
-      await this.lafRepository.save(item);
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-
+    await this.lafRepository.save(item);
     return item;
   }
 

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, Patch, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -51,10 +59,16 @@ export class LafController {
   @ApiBadRequestResponse({
     description: 'category等の値が適切ではない場合に返されます(未実装)',
   })
-  createLafItem(
+  async createLafItem(
     @Body(CreateCategoryPipe) createLafItemDto: CreateLafItemDto,
   ): Promise<LafItem> {
-    return this.lafService.createLafItem(createLafItemDto);
+    const item = await this.lafService.createLafItem(createLafItemDto);
+    if (!item) {
+      throw new BadRequestException(
+        'An item with the same item_id has already been registered.',
+      );
+    }
+    return item;
   }
 
   // TODO: Response Type
