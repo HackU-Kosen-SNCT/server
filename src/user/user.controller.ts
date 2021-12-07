@@ -4,7 +4,6 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
 } from '@nestjs/swagger';
 import { UserCategoryPipe } from './user-category.pipe';
 import { UpdateCategoryDto, UpdateCategoryResponse } from './user.dto';
