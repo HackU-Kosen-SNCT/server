@@ -8,6 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // validation pipe
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors({
+    origin: '*',
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+  });
 
   // swagger
   const options = new DocumentBuilder()
