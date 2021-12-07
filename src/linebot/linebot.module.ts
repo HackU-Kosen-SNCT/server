@@ -19,11 +19,5 @@ export class LinebotModule {
       channelSecret: configService.get('LINE_BOT_CHANNEL_SECRET')
     };
 
-
-    // config を指定して LINE SDK の middleware を指定する
-    // 先にLinebot側のmiddlewareが働く必要があるため
-    consumer
-      .apply(middleware(lineConfig))
-      .forRoutes(LinebotController);
   }
 }
