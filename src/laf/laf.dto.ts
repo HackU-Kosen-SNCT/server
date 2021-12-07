@@ -42,7 +42,7 @@ export class GetLafItemsResponse {
         longitude: 84.28292,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
-        created_at: '2021-12-01 15:25:12',
+        created_at: '2021-12-06T16:34:21.423Z',
       },
       {
         item_id: '20211205170917500',
@@ -52,7 +52,7 @@ export class GetLafItemsResponse {
         longitude: 78.28292,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
-        created_at: '2021-12-05 17:09:17',
+        created_at: '2021-12-07T06:32:19.329Z',
       },
     ],
   })
@@ -60,73 +60,84 @@ export class GetLafItemsResponse {
 }
 
 export class PostLafItemResponse {
+  @ApiProperty({ type: String, example: '20211205170917500' })
+  item_id: string;
+
+  @ApiProperty({ type: String, example: 'clothing' })
+  category: string;
+
+  @ApiProperty({ type: String, example: 'スポーツタオル' })
+  detail: string;
+
+  @ApiProperty({ type: Number, example: 82.28422 })
+  latitude: number;
+
+  @ApiProperty({ type: Number, example: 78.28292 })
+  longitude: number;
+
   @ApiProperty({
-    type: LafItem,
-    example: [
-      {
-        item_id: '20211205170917500',
-        category: 'clothing',
-        detail: 'スポーツタオル',
-        latitude: 82.28422,
-        longitude: 78.28292,
-        image_url:
-          'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
-        created_at: '2021-12-05 17:09:17',
-      },
-    ],
+    type: String,
+    example:
+      'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
   })
-  item: LafItem;
+  image_url: string;
+
+  @ApiProperty({ type: Date, example: '2021-12-06T16:34:21.423Z' })
+  created_at: Date;
 }
 
 export class CreateLafItemDto {
-  @ApiProperty()
+  @ApiProperty({ example: '20211205170917500' })
   @IsNotEmpty()
   item_id: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'clothing' })
   @IsNotEmpty()
   category: ItemCategory;
 
-  @ApiProperty()
+  @ApiProperty({ required: false, example: 'スポーツタオル' })
   detail: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 82.28422 })
   @IsNotEmpty()
   latitude: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 78.28292 })
   @IsNotEmpty()
   longitude: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    example:
+      'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+  })
   @IsNotEmpty()
   image_url: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2021-12-06T16:34:21.423Z' })
   @IsNotEmpty()
   created_at: Date;
 }
 
 export class RegistrantDto {
-  @ApiProperty()
+  @ApiProperty({ example: '20211205170917500' })
   @IsNotEmpty()
   item_id: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '9ak2982ntj' })
   @IsNotEmpty()
   registrant: string;
 }
 
 export class ReceiveDto {
-  @ApiProperty()
+  @ApiProperty({ example: '20211205170917500' })
   @IsNotEmpty()
   item_id: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'ありがとうございました！' })
   @IsNotEmpty()
   message: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2021-12-06T16:34:21.423Z' })
   @IsNotEmpty()
   received_at: Date;
 }
