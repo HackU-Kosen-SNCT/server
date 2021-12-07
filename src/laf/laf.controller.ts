@@ -3,11 +3,12 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
 } from '@nestjs/swagger';
+import { CreateCategoryPipe } from './create-category.pipe';
 import {
   GetLafItemsResponse,
   LafItem,
@@ -43,41 +44,6 @@ export class LafController {
   @Post()
   @HttpCode(201)
   @ApiOperation({ summary: '落とし物を登録するAPI' })
-  @ApiParam({
-    name: 'created_at',
-    required: true,
-    description: '登録時刻',
-  })
-  @ApiParam({
-    name: 'image_url',
-    required: true,
-    description: '画像URL',
-  })
-  @ApiParam({
-    name: 'longitude',
-    required: true,
-    description: '座標',
-  })
-  @ApiParam({
-    name: 'latitude',
-    required: true,
-    description: '座標',
-  })
-  @ApiParam({
-    name: 'detail',
-    required: false,
-    description: '詳しい場所などの詳細情報',
-  })
-  @ApiParam({
-    name: 'category',
-    required: true,
-    description: '落とし物のカテゴリ',
-  })
-  @ApiParam({
-    name: 'item_id',
-    required: true,
-    description: '登録された落とし物のID',
-  })
   @ApiCreatedResponse({
     type: PostLafItemResponse,
     description: '成功時処理',
@@ -85,23 +51,15 @@ export class LafController {
   @ApiBadRequestResponse({
     description: 'category等の値が適切ではない場合に返されます(未実装)',
   })
-  createLafItem(@Body() createLafItemDto: CreateLafItemDto): Promise<LafItem> {
+  createLafItem(
+    @Body(CreateCategoryPipe) createLafItemDto: CreateLafItemDto,
+  ): Promise<LafItem> {
     return this.lafService.createLafItem(createLafItemDto);
   }
 
   // TODO: Response Type
   @Patch('/registrant')
   @ApiOperation({ summary: '落とし物の登録者を設定するAPI' })
-  @ApiParam({
-    name: 'registrant',
-    required: true,
-    description: '落とし物の登録者のID',
-  })
-  @ApiParam({
-    name: 'item_id',
-    required: true,
-    description: '落とし物のID',
-  })
   @ApiOkResponse({
     description: '成功時処理(未実装)',
   })
@@ -119,21 +77,6 @@ export class LafController {
   @ApiOperation({
     summary: 'メッセージの送信・落とし物の受け取り処理を行うAPI',
   })
-  @ApiParam({
-    name: 'received_at',
-    required: true,
-    description: '受け取った時刻',
-  })
-  @ApiParam({
-    name: 'message',
-    required: true,
-    description: '受け取った時に入力する感謝のメッセージ',
-  })
-  @ApiParam({
-    name: 'item_id',
-    required: true,
-    description: '落とし物のID',
-  })
   @ApiOkResponse({
     description: '成功時処理(未実装)',
   })
@@ -145,5 +88,6 @@ export class LafController {
   })
   receive(@Body() receiveDto: ReceiveDto) {
     this.lafService.receive(receiveDto);
+    return ApiNoContentResponse;
   }
 }

@@ -4,7 +4,7 @@ import { UpdateCategoryDto } from './user.dto';
 export class UserCategoryPipe implements PipeTransform {
   readonly allowCategories = [
     'valuables',
-    'stationery',
+    'stationary',
     'clothing',
     'others',
     'unset',
@@ -14,7 +14,9 @@ export class UserCategoryPipe implements PipeTransform {
     const searching_category = value.searching_category.toLowerCase();
 
     if (!this.isCategoryValid(searching_category)) {
-      throw new BadRequestException();
+      throw new BadRequestException(
+        'The value of the searching_category is not appropriate.',
+      );
     }
     return value;
   }

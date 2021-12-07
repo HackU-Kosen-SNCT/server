@@ -16,22 +16,13 @@ export class UserController {
 
   @Patch('/category')
   @ApiOperation({ summary: 'ユーザーの探しているもののカテゴリを変更するAPI' })
-  @ApiParam({
-    name: 'searching_category',
-    required: true,
-    description: 'ユーザーが登録できるカテゴリ',
-  })
-  @ApiParam({
-    name: 'registrant',
-    required: true,
-    description: 'ユーザーのID',
-  })
   @ApiOkResponse({
     description: '成功時処理',
     type: UpdateCategoryResponse,
   })
   @ApiBadRequestResponse({
-    description: 'searching_categoryの値が適切ではない場合に返されます',
+    description:
+      'searching_categoryの値が適切ではない場合やパラメータが不足している時に返されます',
   })
   @ApiNotFoundResponse({
     description: 'registrantの値が適切ではない(存在しない場合に返されます)',
