@@ -77,7 +77,7 @@ export class LafController {
   @Patch('/registrant')
   @ApiOperation({ summary: '落とし物の登録者を設定するAPI' })
   @ApiNoContentResponse({
-    description: '成功時処理(未実装)',
+    description: '成功時処理',
   })
   @ApiBadRequestResponse({
     description: '必須のプロパティが空の時などに返す',
@@ -100,7 +100,7 @@ export class LafController {
     summary: 'メッセージの送信・落とし物の受け取り処理を行うAPI',
   })
   @ApiNoContentResponse({
-    description: '成功時処理(未実装)',
+    description: '成功時処理',
   })
   @ApiBadRequestResponse({
     description: '必須のプロパティが空の時などに返す',
