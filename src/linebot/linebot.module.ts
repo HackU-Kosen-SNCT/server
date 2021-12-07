@@ -2,7 +2,7 @@ import { Module ,MiddlewareConsumer} from '@nestjs/common';
 import { LinebotService } from './linebot.service';
 import { LinebotController } from './linebot.controller';
 import { middleware, MiddlewareConfig } from '@line/bot-sdk';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   providers: [LinebotService],
@@ -11,10 +11,12 @@ import { ConfigModule } from '@nestjs/config';
 export class LinebotModule {
   configure(consumer: MiddlewareConsumer) {
 
+    const configService = new ConfigService();
+
     //Linebotのアクセストークン
     const lineConfig: MiddlewareConfig = {
-      channelAccessToken: process.env.LINE_BOT_CHANNEL_TOKEN,
-      channelSecret: process.env.LINE_BOT_CHANNEL_SECRET,
+      channelAccessToken: configService.get('LINE_BOT_CHANNEL_TOKEN'),
+      channelSecret: configService.get('LINE_BOT_CHANNEL_SECRET')
     };
 
 
