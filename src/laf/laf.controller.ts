@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  NotFoundException,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -57,7 +58,8 @@ export class LafController {
     description: '成功時処理',
   })
   @ApiBadRequestResponse({
-    description: 'category等の値が適切ではない場合に返されます(未実装)',
+    description:
+      '必須のプロパティが空の時や既にitem_idが存在している場合に返されます',
   })
   async createLafItem(
     @Body(CreateCategoryPipe) createLafItemDto: CreateLafItemDto,
@@ -74,16 +76,22 @@ export class LafController {
   // TODO: Response Type
   @Patch('/registrant')
   @ApiOperation({ summary: '落とし物の登録者を設定するAPI' })
-  @ApiOkResponse({
+  @ApiNoContentResponse({
     description: '成功時処理(未実装)',
+  })
+  @ApiBadRequestResponse({
+    description: '必須のプロパティが空の時などに返す',
   })
   @ApiNotFoundResponse({
     description:
-      'item_id, registrantに適切でない(存在しない)値が入っていた場合に返す(未実装)',
+      'item_id, registrantに適切でない(存在しない)値が入っていた場合に返す',
   })
-  registrant(@Body() registrantDto: RegistrantDto) {
-    // TODO: registrant(LINEのuser_id)の値が存在するかのチェックもいるかも
-    this.lafService.registrant(registrantDto);
+  @HttpCode(204)
+  async registrant(@Body() registrantDto: RegistrantDto) {
+    const item = await this.lafService.registrant(registrantDto);
+    if (!item) {
+      throw new NotFoundException('The item_id or registrant does not exist.');
+    }
   }
 
   // TODO: Response Type
@@ -91,17 +99,20 @@ export class LafController {
   @ApiOperation({
     summary: 'メッセージの送信・落とし物の受け取り処理を行うAPI',
   })
-  @ApiOkResponse({
+  @ApiNoContentResponse({
     description: '成功時処理(未実装)',
   })
   @ApiBadRequestResponse({
-    description: 'messageが空の時などに返す(未実装)',
+    description: '必須のプロパティが空の時などに返す',
   })
   @ApiNotFoundResponse({
-    description: 'item_idが存在しない場合に返す(未実装)',
+    description: 'item_idが存在しない場合に返す',
   })
-  receive(@Body() receiveDto: ReceiveDto) {
-    this.lafService.receive(receiveDto);
-    return ApiNoContentResponse;
+  @HttpCode(204)
+  async receive(@Body() receiveDto: ReceiveDto) {
+    const item = await this.lafService.receive(receiveDto);
+    if (!item) {
+      throw new NotFoundException('The item_id does not exist.');
+    }
   }
 }
