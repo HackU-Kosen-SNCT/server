@@ -7,6 +7,8 @@ import {
   NotFoundException,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -61,6 +63,7 @@ export class LafController {
     description:
       '必須のプロパティが空の時や既にitem_idが存在している場合に返されます',
   })
+  @UsePipes(new ValidationPipe({ transform: true }))
   async createLafItem(
     @Body(CreateCategoryPipe) createLafItemDto: CreateLafItemDto,
   ): Promise<LafItem> {
@@ -87,6 +90,7 @@ export class LafController {
       'item_id, registrantに適切でない(存在しない)値が入っていた場合に返す',
   })
   @HttpCode(204)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async registrant(@Body() registrantDto: RegistrantDto) {
     const item = await this.lafService.registrant(registrantDto);
     if (!item) {
@@ -109,6 +113,7 @@ export class LafController {
     description: 'item_idが存在しない場合に返す',
   })
   @HttpCode(204)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async receive(@Body() receiveDto: ReceiveDto) {
     const item = await this.lafService.receive(receiveDto);
     if (!item) {

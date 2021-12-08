@@ -1,4 +1,4 @@
-import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
+import { NestApplicationOptions } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -9,8 +9,7 @@ async function bootstrap() {
     bodyParser: false,
   };
   const app = await NestFactory.create(AppModule, options);
-  // validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+
   app.enableCors({
     origin: '*',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
