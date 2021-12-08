@@ -1,25 +1,27 @@
-import { ValidationPipe } from '@nestjs/common';
+import { NestApplicationOptions } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+  const options: NestApplicationOptions = {
+    bodyParser: false,
+  };
+  const app = await NestFactory.create(AppModule, options);
+
   app.enableCors({
     origin: '*',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   });
 
   // swagger
-  const options = new DocumentBuilder()
+  const swaggerOptions = new DocumentBuilder()
     .setTitle('api document')
     .setDescription('API仕様書')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, options);
+  const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('document', app, document);
 
   // config
