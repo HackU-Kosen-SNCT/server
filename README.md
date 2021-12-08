@@ -35,6 +35,15 @@ source /sql/laf.sql
 - ここでもう一度`localhost:3000/laf`にアクセスすると今度は空配列ではなくちゃんとしたデータが返ってくると思います。(API が実装されていれば)
 - 2 回目以降は`docker compose up -d`のみで構いません
 
+## テスト
+
+```bash
+docker compose exec server /bin/sh
+
+# docker compose up -d の直後だと error が出る場合あり
+yarn run test
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

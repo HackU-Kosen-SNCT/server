@@ -5,22 +5,23 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  //const Parseroption : NestApplicationOptions = {
-  //  bodyParser : false,
-  //}
+  const options: NestApplicationOptions = {
+    bodyParser: false,
+  };
+  const app = await NestFactory.create(AppModule, options);
 
-  const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: '*',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   });
 
-  const options = new DocumentBuilder()
+  // swagger
+  const swaggerOptions = new DocumentBuilder()
     .setTitle('api document')
-    .setDescription('API仕様書だよ~')
+    .setDescription('API仕様書')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, options);
+  const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('document', app, document);
 
   // config

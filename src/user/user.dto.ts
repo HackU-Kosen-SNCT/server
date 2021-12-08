@@ -10,11 +10,25 @@ export type UserCategory =
   | 'unset';
 
 export class UpdateCategoryDto {
-  @ApiProperty()
+  @ApiProperty({ example: '9ak2982ntj' })
   @IsNotEmpty()
   registrant: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'others' })
   @IsNotEmpty()
   searching_category: UserCategory;
+}
+
+export class UpdateCategoryResponse {
+  @ApiProperty({
+    type: String,
+    example: '9ak2982ntj',
+  })
+  registrant: string;
+
+  @ApiProperty({
+    type: String,
+    example: 'others',
+  })
+  searching_category: string;
 }
