@@ -27,6 +27,6 @@ export class LinebotController {
 
   @Get()
   getEvent() {
-    return 'hello';
+    return this.linebotService.SettingrichMenu();
   }
 }

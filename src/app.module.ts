@@ -1,4 +1,4 @@
-import { Module , MiddlewareConsumer} from '@nestjs/common';
+import { Module , MiddlewareConsumer , NestModule} from '@nestjs/common';
 import { ConfigModule , ConfigService} from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
