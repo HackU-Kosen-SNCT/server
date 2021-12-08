@@ -1,10 +1,15 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { LafModule } from './laf/laf.module';
 import { UserModule } from './user/user.module';
 import { LinebotModule } from './linebot/linebot.module';
+import { middleware as LineMiddleware } from '@line/bot-sdk';
+import { LinebotController } from './linebot/linebot.controller';
+
+import bodyParser = require('body-parser');
+import { LinebotConfigService } from './config/linebot-config.service';
 
 @Module({
   imports: [
@@ -23,5 +28,25 @@ import { LinebotModule } from './linebot/linebot.module';
       useClass: TypeOrmConfigService,
     }),
   ],
+  providers: [LinebotConfigService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(readonly linebotConfigService: LinebotConfigService) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LineMiddleware(this.linebotConfigService.createLinebotOptions()))
+      .forRoutes(LinebotController);
+    consumer.apply(
+      bodyParser.json(),
+      bodyParser.urlencoded({ extended: false }),
+    );
+  }
+
+  createLinebotOptions() {
+    const configService = new ConfigService();
+    return {
+      channelAccessToken: configService.get<string>('LINE_BOT_CHANNEL_TOKEN'),
+      channelSecret: configService.get<string>('LINE_BOT_CHANNEL_SECRET'),
+    };
+  }
+}
