@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { LafModule } from './laf/laf.module';
@@ -40,13 +40,5 @@ export class AppModule {
       bodyParser.json(),
       bodyParser.urlencoded({ extended: false }),
     );
-  }
-
-  createLinebotOptions() {
-    const configService = new ConfigService();
-    return {
-      channelAccessToken: configService.get<string>('LINE_BOT_CHANNEL_TOKEN'),
-      channelSecret: configService.get<string>('LINE_BOT_CHANNEL_SECRET'),
-    };
   }
 }

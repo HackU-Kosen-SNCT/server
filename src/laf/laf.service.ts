@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LinebotService } from 'src/linebot/linebot.service';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateLafItemDto, ReceiveDto, RegistrantDto } from './laf.dto';
@@ -10,9 +11,11 @@ export class LafService {
   constructor(
     @InjectRepository(Laf) private lafRepository: Repository<Laf>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    private linebotService: LinebotService,
   ) {}
 
   async getLafItems(): Promise<Laf[]> {
+    this.linebotService.sendLafItemToLinebot('Hello World!');
     return await this.lafRepository.find();
   }
 
