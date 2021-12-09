@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { LinebotService } from './linebot.service';
 import { ConfigService } from '@nestjs/config';
 import { Client, TextEventMessage } from '@line/bot-sdk';
@@ -12,7 +12,7 @@ export class LinebotController {
     private linebotConfigService: LinebotConfigService,
   ) {}
 
-  @Post()
+  @Post('/message')
   // LINEプラットフォームから届くものを処理する
   // ex: 友達追加、メッセージの送信
   create(@Body() destination: string, @Body() events: TextEventMessage[]) {
@@ -25,7 +25,18 @@ export class LinebotController {
     });
   }
 
+  @Post()
+  @HttpCode(200)
+  posttest(){
+    return 'ok';
+  }
+
   @Get()
+  gethello() {
+    return 'hello';
+  }
+
+  @Post('/test')
   getEvent() {
     return this.linebotService.SettingrichMenu();
   }

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import * as line from '@line/bot-sdk';
 import { Client , RichMenu} from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto'
+import * as fs from 'fs';
 @Injectable()
 export class LinebotService {
   constructor(
@@ -22,39 +23,43 @@ export class LinebotService {
     });
   }
 
-  SettingrichMenu() : void {
+  async SettingrichMenu() {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
 
-  const client = new line.Client({
-    channelAccessToken: 'vYu+1pZ92RwBbzU7NwqclBb+G5mgtA6colTF7s9zeMjp+crfBbRREmIIHFnyxMi8PNuDTX51XQpHk/hVN2QKU0OzP5zPWuOCroC/dVnsyr6YHfK6fGs17Tw8ondDY693ZtjaAd9VfwaG4K6lDIo73wdB04t89/1O/w1cDnyilFU='
-  });
-
-  const richmenu : RichMenu= {
-    size: {
-      width: 2500,
-      height: 1686
-    },
-    selected: false,
-    name: "Nice richmenu",
-    chatBarText: "Tap to open",
-    areas:[ 
-      {
-        bounds: {
-          x: 0,
-          y: 0,
+    const richmenu : RichMenu= {
+        size: {
           width: 2500,
           height: 1686
         },
-        action: {
-          type: "postback",
-          data: "action=buy&itemid=123"
-        }
-      }
-    ]
-  };
+        selected: true,
+        name: "リッチメニュー 1",
+        chatBarText: "メニュー一覧",
+        areas: [
+          {
+            bounds: {
+              x: 0,
+              y: 0,
+              width: 1250,
+              height: 843
+            },
+            action: {
+              type: "uri",
+              uri: "https://liff.line.me/1656701091-JxvpwXG2"
+            }
+          }
+        ]
+    }
 
-  client.createRichMenu(richmenu)
-    .then((richMenuId : any) =>
-    console.log(richMenuId))
-}
+    const richMenuId = await client.createRichMenu(richmenu);
+    await client.setRichMenuImage(
+      richMenuId,
+      fs.createReadStream('src/linebot/rich.jpg')
+    );
+    await client.setDefaultRichMenu(richMenuId);
+
+    await client.createRichMenu(richmenu)
+      .then((richMenuId : any) =>
+      console.log(richMenuId))
+  }
 }
 
