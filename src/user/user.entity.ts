@@ -8,7 +8,22 @@ export class User extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: ['valuables', 'stationery', 'clothing', 'others', 'unset'],
+    enum: [
+      'wallet',
+      'smartPhone',
+      'waterBottle',
+      'stationery',
+      'key',
+      'usb',
+      'textbook',
+      'notebook/file',
+      'earphone',
+      'calculator',
+      'umbrella',
+      'clothing',
+      'others',
+      'unset',
+    ],
     default: 'unset',
   })
   searching_category: UserCategory;

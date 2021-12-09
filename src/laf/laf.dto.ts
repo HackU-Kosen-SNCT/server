@@ -2,7 +2,20 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 // 登録時に設定できるカテゴリ
-export type ItemCategory = 'valuables' | 'stationery' | 'clothing' | 'others';
+export type ItemCategory =
+  | 'wallet'
+  | 'smartPhone'
+  | 'waterBottle'
+  | 'stationery'
+  | 'key'
+  | 'usb'
+  | 'textbook'
+  | 'notebook/file'
+  | 'earphone'
+  | 'calculator'
+  | 'umbrella'
+  | 'clothing'
+  | 'others';
 
 export class LafItem {
   @ApiProperty()

@@ -12,7 +12,21 @@ export class Laf {
 
   @Column({
     type: 'enum',
-    enum: ['valuables', 'stationery', 'clothing', 'others'],
+    enum: [
+      'wallet',
+      'smartPhone',
+      'waterBottle',
+      'stationery',
+      'key',
+      'usb',
+      'textbook',
+      'notebook/file',
+      'earphone',
+      'calculator',
+      'umbrella',
+      'clothing',
+      'others',
+    ],
     default: 'others',
   })
   category: ItemCategory;

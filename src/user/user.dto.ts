@@ -3,8 +3,17 @@ import { IsNotEmpty } from 'class-validator';
 
 // ユーザーが設定できるカテゴリ
 export type UserCategory =
-  | 'valuables'
+  | 'wallet'
+  | 'smartPhone'
+  | 'waterBottle'
   | 'stationery'
+  | 'key'
+  | 'usb'
+  | 'textbook'
+  | 'notebook/file'
+  | 'earphone'
+  | 'calculator'
+  | 'umbrella'
   | 'clothing'
   | 'others'
   | 'unset';
