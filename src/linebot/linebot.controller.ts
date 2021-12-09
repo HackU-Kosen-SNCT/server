@@ -3,6 +3,7 @@ import { LinebotService } from './linebot.service';
 import { ConfigService } from '@nestjs/config';
 import { Client, TextEventMessage } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
+import * as crypto from 'crypto';
 
 @Controller('linebot')
 export class LinebotController {
@@ -12,7 +13,7 @@ export class LinebotController {
     private linebotConfigService: LinebotConfigService,
   ) {}
 
-  @Post('/message')
+  @Post()
   // LINEプラットフォームから届くものを処理する
   // ex: 友達追加、メッセージの送信
   create(@Body() destination: string, @Body() events: TextEventMessage[]) {
@@ -25,19 +26,10 @@ export class LinebotController {
     });
   }
 
-  @Post()
-  @HttpCode(200)
-  posttest(){
-    return 'ok';
-  }
 
-  @Get()
-  gethello() {
-    return 'hello';
-  }
 
   @Post('/test')
-  getEvent() {
+  createRichMenu() {
     return this.linebotService.SettingrichMenu();
   }
 }
