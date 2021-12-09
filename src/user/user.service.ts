@@ -26,4 +26,13 @@ export class UserService {
 
     return user;
   }
+
+  // ユーザーが新規登録された時にDBにセットする
+  async registerUser(registrant: string) {
+    if (!registrant) return;
+    const user = new User();
+    user.registrant = registrant;
+    user.searching_category = 'unset';
+    await this.userRepository.save(user);
+  }
 }
