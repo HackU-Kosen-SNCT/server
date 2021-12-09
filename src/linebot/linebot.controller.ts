@@ -3,6 +3,7 @@ import { LinebotService } from './linebot.service';
 import { ConfigService } from '@nestjs/config';
 import { Client, TextEventMessage } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
+import * as crypto from 'crypto';
 
 @Controller('linebot')
 export class LinebotController {
@@ -19,9 +20,16 @@ export class LinebotController {
     console.log(destination);
     console.log(events);
     const client = new Client(this.linebotConfigService.createLinebotOptions());
-    return client.pushMessage(
-      this.configService.get<string>('LINE_USER_ID'),
-      this.linebotService.carouselMessage(),
-    );
+    return client.pushMessage(this.configService.get<string>('LINE_USER_ID'), {
+      type: 'text',
+      text: 'Hello World',
+    });
+  }
+
+
+
+  @Post('/test')
+  createRichMenu() {
+    return this.linebotService.SettingrichMenu();
   }
 }
