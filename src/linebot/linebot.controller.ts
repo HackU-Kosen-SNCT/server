@@ -38,8 +38,6 @@ export class LinebotController {
     // );
   }
 
-
-
   @Post('/test')
   createRichMenu() {
     return this.linebotService.SettingrichMenu();
