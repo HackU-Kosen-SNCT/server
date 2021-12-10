@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["datetime", "envfiles", "linebot", "nestjs", "typeorm"]
+  "cSpell.words": [
+    "datetime",
+    "envfiles",
+    "linebot",
+    "nestjs",
+    "postback",
+    "typeorm"
+  ]
 }

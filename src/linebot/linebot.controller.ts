@@ -25,21 +25,16 @@ export class LinebotController {
         case 'follow':
           // 友達追加時のイベント
           // userテーブルへの追加処理を生やす
+          // リッチメニューの設定
           this.userService.registerUser(event.source.userId);
+          this.linebotService.SettingRichMenu();
+          break;
+        case 'postback':
+          this.linebotService.postBackHandler(event);
           break;
         default:
           break;
       }
     });
-    // const client = new Client(this.linebotConfigService.createLinebotOptions());
-    // return client.pushMessage(
-    //   this.configService.get<string>('LINE_USER_ID'),
-    //   this.linebotService.carouselMessage(),
-    // );
-  }
-
-  @Post('/test')
-  createRichMenu() {
-    return this.linebotService.SettingrichMenu();
   }
 }
