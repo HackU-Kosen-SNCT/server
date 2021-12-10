@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Client, RichMenu } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
-import * as crypto from 'crypto';
 import * as fs from 'fs';
 import type { TemplateMessage } from '@line/bot-sdk';
 
@@ -15,14 +14,45 @@ export class LinebotService {
 
   // send to linebot laf item
   // 落とし物が登録された時にLINEBotへメッセージを送信する
-  // 今の時点では Hello World というメッセージが送信されるだけ。
-  // あとLINE_USER_IDが固定になっている
-  sendLafItemToLinebot(message: string) {
+  sendLafItemToLinebot(userIds: string[]) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
-    return client.pushMessage(this.configService.get<string>('LINE_USER_ID'), {
+    // TODO: textではなくflex message返すように修正
+    return client.multicast(userIds, {
       type: 'text',
-      text: message,
+      text: 'hello',
     });
+  }
+
+  // send to linebot laf items
+  // ユーザーがこれを落としたと登録したときに直近に登録された落とし物を送信する
+  sendLafItemsToLinebot(userId: string) {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
+    // TODO: textではなくflex message返すように修正
+    return client.pushMessage(userId, {
+      type: 'text',
+      text: 'hello',
+    });
+  }
+
+  // 感謝のメッセージを送信する
+  // 今はmessageだけだけど、この落とし物が届いたってわかるためには登録した写真とかも返してあげる？
+  sendTheMessageOfThanks(
+    message: string,
+    registrant: string,
+    imageUrl: string,
+  ) {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
+    return client.pushMessage(registrant, [
+      {
+        type: 'image',
+        originalContentUrl: imageUrl,
+        previewImageUrl: imageUrl,
+      },
+      {
+        type: 'text',
+        text: message,
+      },
+    ]);
   }
 
   async SettingrichMenu() {
@@ -97,15 +127,5 @@ export class LinebotService {
       },
     };
     return message;
-  }
-
-  // 感謝のメッセージを送信する
-  // 今はmessageだけだけど、この落とし物が届いたってわかるためには登録した写真とかも返してあげる？
-  sendTheMessageOfThanks(message: string, registrant: string) {
-    const client = new Client(this.linebotConfigService.createLinebotOptions());
-    return client.pushMessage(registrant, {
-      type: 'text',
-      text: message,
-    });
   }
 }
