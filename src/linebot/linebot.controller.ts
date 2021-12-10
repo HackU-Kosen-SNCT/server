@@ -31,7 +31,6 @@ export class LinebotController {
     return this.linebotService.sendFlexMessage_test()
   }
   
-
   @Post('/test')
   getEvent(@Body() body:any) {
     console.log(body)

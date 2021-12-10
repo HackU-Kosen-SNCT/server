@@ -41,7 +41,7 @@ export class LinebotService {
                 "margin": "none",
                 "position": "relative",
                 "flex": 1,
-                "aspectMode": "cover"
+                
               }
             },
             {
