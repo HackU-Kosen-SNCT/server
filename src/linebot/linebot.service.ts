@@ -157,8 +157,6 @@ export class LinebotService {
       .createRichMenu(richmenu)
       .then((richMenuId: any) => console.log(richMenuId));
   }
-      
-}
 
 
   // 感謝のメッセージを送信する
