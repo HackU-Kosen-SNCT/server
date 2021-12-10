@@ -4,6 +4,8 @@ import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto'
 import * as fs from 'fs';
+import type { TemplateMessage } from '@line/bot-sdk';
+
 @Injectable()
 export class LinebotService {
   constructor(
@@ -103,6 +105,42 @@ export class LinebotService {
     await client.createRichMenu(richmenu)
       .then((richMenuId : any) =>
       console.log(richMenuId))
+  }
+      
+      
+  carouselMessage(): TemplateMessage {
+    const message: TemplateMessage = {
+      type: 'template',
+      altText: 'cannot display template message',
+      template: {
+        type: 'carousel',
+        columns: [
+          {
+            text: 'Hoge',
+            title: 'Fuga',
+            actions: [
+              {
+                type: 'uri',
+                label: 'See Wikipedia',
+                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
+              },
+            ],
+          },
+          {
+            text: 'foo',
+            title: 'bar',
+            actions: [
+              {
+                type: 'uri',
+                label: 'See Wikipedia',
+                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
+              },
+            ],
+          },
+        ],
+      },
+    };
+    return message;
   }
 }
 
