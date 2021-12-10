@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ItemCategory } from 'src/laf/laf.dto';
 import { Repository } from 'typeorm';
 import { UpdateCategoryDto } from './user.dto';
 import { User } from './user.entity';
@@ -34,5 +35,16 @@ export class UserService {
     user.registrant = registrant;
     user.searching_category = 'unset';
     await this.userRepository.save(user);
+  }
+
+  // カテゴリを受け取り、そのカテゴリを`searching_category`にしているユーザーのid(registrant)を返却する
+  // /lafのPOSTリクエストが呼ばれた時にこれを呼び出すことで該当するUserのIDを取得
+  // そこからカルーセルメッセージの関数を呼ぶことでLINEへ送信
+  async userIdsToFindThatCategory(category: ItemCategory) {
+    return await this.userRepository.find({
+      // registrantのみ取得する
+      select: ['registrant'],
+      where: { searching_category: category },
+    });
   }
 }

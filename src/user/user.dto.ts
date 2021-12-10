@@ -1,22 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { ItemCategory } from 'src/laf/laf.dto';
 
 // ユーザーが設定できるカテゴリ
-export type UserCategory =
-  | 'wallet'
-  | 'smartPhone'
-  | 'waterBottle'
-  | 'stationery'
-  | 'key'
-  | 'usb'
-  | 'textbook'
-  | 'notebook/file'
-  | 'earphone'
-  | 'calculator'
-  | 'umbrella'
-  | 'clothing'
-  | 'others'
-  | 'unset';
+export type UserCategory = ItemCategory | 'unset';
 
 export class UpdateCategoryDto {
   @ApiProperty({ example: '9ak2982ntj' })
