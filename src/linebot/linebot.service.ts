@@ -201,4 +201,97 @@ export class LinebotService {
     };
     return message;
   }
+
+  sendFlexMessage_test() {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
+    return client.pushMessage(this.configService.get<string>('LINE_USER_ID'), {
+      type: 'flex',
+      altText: 'This is a Flex Message',
+      contents: {
+        type: 'carousel',
+        contents: [
+          {
+            type: 'bubble',
+            size: 'micro',
+            hero: {
+              type: 'image',
+              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
+              size: 'xxl',
+              margin: 'none',
+              position: 'relative',
+              flex: 1,
+              backgroundColor: '#000000',
+              aspectMode: 'cover',
+            },
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'text',
+                  text: 'カテゴリ',
+                  margin: 'none',
+                  weight: 'regular',
+                  position: 'relative',
+                  align: 'center',
+                },
+                {
+                  type: 'text',
+                  text: '時間',
+                  margin: 'md',
+                  size: 'xs',
+                },
+              ],
+            },
+          },
+          {
+            type: 'bubble',
+            size: 'micro',
+            hero: {
+              type: 'image',
+              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
+              size: 'full',
+              flex: 2,
+              position: 'relative',
+              aspectMode: 'cover',
+            },
+          },
+          {
+            type: 'bubble',
+            size: 'micro',
+            hero: {
+              type: 'image',
+              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
+              size: 'xxl',
+              margin: 'none',
+              position: 'relative',
+              flex: 1,
+              backgroundColor: '#000000',
+              aspectMode: 'cover',
+            },
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'text',
+                  text: 'カテゴリ',
+                  margin: 'none',
+                  weight: 'regular',
+                  position: 'relative',
+                  align: 'center',
+                },
+                {
+                  type: 'text',
+                  text: '時間',
+                  margin: 'md',
+                  size: 'xs',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    });
+  }
 }
