@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import '@line/bot-sdk';
-import { Client } from '@line/bot-sdk';
+import { Client , RichMenu} from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto'
+import * as fs from 'fs';
 import type { TemplateMessage } from '@line/bot-sdk';
+
 @Injectable()
 export class LinebotService {
   constructor(
@@ -22,6 +24,47 @@ export class LinebotService {
       text: message,
     });
   }
+
+  async SettingrichMenu() {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
+
+    const richmenu : RichMenu= {
+        size: {
+          width: 2500,
+          height: 1686
+        },
+        selected: true,
+        name: "リッチメニュー 1",
+        chatBarText: "メニュー一覧",
+        areas: [
+          {
+            bounds: {
+              x: 0,
+              y: 0,
+              width: 1250,
+              height: 843
+            },
+            action: {
+              type: "uri",
+              uri: "https://liff.line.me/1656701091-JxvpwXG2"
+            }
+          }
+        ]
+    }
+
+    const richMenuId = await client.createRichMenu(richmenu);
+    await client.setRichMenuImage(
+      richMenuId,
+      fs.createReadStream('src/linebot/rich.jpg')
+    );
+    await client.setDefaultRichMenu(richMenuId);
+
+    await client.createRichMenu(richmenu)
+      .then((richMenuId : any) =>
+      console.log(richMenuId))
+  }
+      
+      
   carouselMessage(): TemplateMessage {
     const message: TemplateMessage = {
       type: 'template',
@@ -67,3 +110,4 @@ export class LinebotService {
     });
   }
 }
+

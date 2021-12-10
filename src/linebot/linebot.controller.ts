@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { WebhookEvent, WebhookRequestBody } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { UserService } from 'src/user/user.service';
+import * as crypto from 'crypto';
 
 @Controller('linebot')
 export class LinebotController {
@@ -35,5 +36,12 @@ export class LinebotController {
     //   this.configService.get<string>('LINE_USER_ID'),
     //   this.linebotService.carouselMessage(),
     // );
+  }
+
+
+
+  @Post('/test')
+  createRichMenu() {
+    return this.linebotService.SettingrichMenu();
   }
 }
