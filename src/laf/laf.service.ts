@@ -66,7 +66,8 @@ export class LafService {
     item.received_at = received_at;
 
     await this.lafRepository.save(item);
-    // LINEに送信処
+    // LINEに送信処理
+    this.linebotService.sendTheMessageOfThanks(message, item.registrant);
     return item;
   }
 }

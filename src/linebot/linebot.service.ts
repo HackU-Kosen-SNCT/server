@@ -56,4 +56,14 @@ export class LinebotService {
     };
     return message;
   }
+
+  // 感謝のメッセージを送信する
+  // 今はmessageだけだけど、この落とし物が届いたってわかるためには登録した写真とかも返してあげる？
+  sendTheMessageOfThanks(message: string, registrant: string) {
+    const client = new Client(this.linebotConfigService.createLinebotOptions());
+    return client.pushMessage(registrant, {
+      type: 'text',
+      text: message,
+    });
+  }
 }
