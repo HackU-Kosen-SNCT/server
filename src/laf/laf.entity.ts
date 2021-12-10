@@ -12,19 +12,27 @@ export class Laf {
 
   @Column({
     type: 'enum',
-    enum: ['valuables', 'stationery', 'clothing', 'others'],
+    enum: [
+      'wallet',
+      'smartPhone',
+      'waterBottle',
+      'stationery',
+      'key',
+      'usb',
+      'textbook',
+      'notebook/file',
+      'earphone',
+      'calculator',
+      'umbrella',
+      'clothing',
+      'others',
+    ],
     default: 'others',
   })
   category: ItemCategory;
 
   @Column('varchar', { length: 255, nullable: true })
   detail: string;
-
-  @Column('double')
-  latitude: number;
-
-  @Column('double')
-  longitude: number;
 
   @Column('text')
   image_url: string;
@@ -41,8 +49,6 @@ export class Laf {
   constructor(
     item_id: string,
     category: ItemCategory,
-    latitude: number,
-    longitude: number,
     image_url: string,
     created_at: Date,
     detail?: string,
@@ -51,8 +57,6 @@ export class Laf {
     this.registrant = null;
     this.category = category;
     this.detail = detail;
-    this.latitude = latitude;
-    this.longitude = longitude;
     this.image_url = image_url;
     this.message = null;
     this.created_at = created_at;

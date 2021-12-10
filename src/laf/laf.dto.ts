@@ -2,7 +2,20 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 // 登録時に設定できるカテゴリ
-export type ItemCategory = 'valuables' | 'stationery' | 'clothing' | 'others';
+export type ItemCategory =
+  | 'wallet'
+  | 'smartPhone'
+  | 'waterBottle'
+  | 'stationery'
+  | 'key'
+  | 'usb'
+  | 'textbook'
+  | 'notebook/file'
+  | 'earphone'
+  | 'calculator'
+  | 'umbrella'
+  | 'clothing'
+  | 'others';
 
 export class LafItem {
   @ApiProperty()
@@ -13,12 +26,6 @@ export class LafItem {
 
   @ApiProperty()
   detail: string | null;
-
-  @ApiProperty()
-  latitude: number;
-
-  @ApiProperty()
-  longitude: number;
 
   @ApiProperty()
   image_url: string;
@@ -38,8 +45,6 @@ export class GetLafItemsResponse {
         item_id: '20211201152512300',
         category: 'others',
         detail: null,
-        latitude: 36.82722,
-        longitude: 84.28292,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
         created_at: '2021-12-06T16:34:21.423Z',
@@ -48,8 +53,6 @@ export class GetLafItemsResponse {
         item_id: '20211205170917500',
         category: 'clothing',
         detail: 'スポーツタオル',
-        latitude: 82.28422,
-        longitude: 78.28292,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
         created_at: '2021-12-07T06:32:19.329Z',
@@ -68,12 +71,6 @@ export class PostLafItemResponse {
 
   @ApiProperty({ type: String, example: 'スポーツタオル' })
   detail: string;
-
-  @ApiProperty({ type: Number, example: 82.28422 })
-  latitude: number;
-
-  @ApiProperty({ type: Number, example: 78.28292 })
-  longitude: number;
 
   @ApiProperty({
     type: String,
@@ -97,14 +94,6 @@ export class CreateLafItemDto {
 
   @ApiProperty({ required: false, example: 'スポーツタオル' })
   detail: string;
-
-  @ApiProperty({ example: 82.28422 })
-  @IsNotEmpty()
-  latitude: number;
-
-  @ApiProperty({ example: 78.28292 })
-  @IsNotEmpty()
-  longitude: number;
 
   @ApiProperty({
     example:

@@ -20,15 +20,8 @@ export class LafService {
   }
 
   async createLafItem(createLafItemDto: CreateLafItemDto): Promise<Laf> {
-    const {
-      item_id,
-      category,
-      latitude,
-      longitude,
-      image_url,
-      created_at,
-      detail,
-    } = createLafItemDto;
+    const { item_id, category, image_url, created_at, detail } =
+      createLafItemDto;
 
     // 既にitem_idが同じものがあるかどうか
     const isExistsItem = await this.lafRepository.findOne(item_id);
@@ -37,15 +30,7 @@ export class LafService {
       return;
     }
 
-    const item = new Laf(
-      item_id,
-      category,
-      latitude,
-      longitude,
-      image_url,
-      created_at,
-      detail,
-    );
+    const item = new Laf(item_id, category, image_url, created_at, detail);
 
     await this.lafRepository.save(item);
     return item;
@@ -81,7 +66,8 @@ export class LafService {
     item.received_at = received_at;
 
     await this.lafRepository.save(item);
-    // LINEに送信処
+    // LINEに送信処理
+    this.linebotService.sendTheMessageOfThanks(message, item.registrant);
     return item;
   }
 }
