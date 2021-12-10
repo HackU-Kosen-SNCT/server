@@ -26,10 +26,15 @@ export class LinebotController {
     });
   }
 
-
+  @Post('/flex')
+  sendFlex(): any{
+    return this.linebotService.sendFlexMessage_test()
+  }
+  
 
   @Post('/test')
-  createRichMenu() {
+  getEvent(@Body() body:any) {
+    console.log(body)
     return this.linebotService.SettingrichMenu();
   }
 }
