@@ -43,8 +43,6 @@ describe('LafService', () => {
         item_id: '20211205170917500',
         category: 'clothing',
         detail: 'スポーツタオル',
-        latitude: 82.28422,
-        longitude: 78.28292,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
         created_at: new Date(),
