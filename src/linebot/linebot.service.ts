@@ -8,13 +8,17 @@ import { UpdateQuickReply } from './linebot.data';
 import { UserCategory } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import { CategoryConversion } from 'src/laf/laf.dto';
+import { Laf } from 'src/laf/laf.entity';
+import { LinebotLafService } from 'src/laf/linebot-laf.service';
 
 @Injectable()
 export class LinebotService {
+  // lafRepository を定義しているのは渋々って感じ...
   constructor(
     private configService: ConfigService,
     private linebotConfigService: LinebotConfigService,
     private userService: UserService,
+    private linebotLafService: LinebotLafService,
   ) {}
 
   postBackHandler(event: PostbackEvent) {
@@ -37,7 +41,8 @@ export class LinebotService {
 
   // send to linebot laf item
   // 落とし物が登録された時にLINEBotへメッセージを送信する
-  sendLafItemToLinebot(userIds: string[]) {
+  // searching_category === postされたcategoryの人全員に送る
+  sendLafItemToLinebot(userIds: string[], item: Laf) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
     return client.multicast(userIds, {
@@ -108,6 +113,12 @@ export class LinebotService {
             user.searching_category,
           )}を落とした物として登録しました。`;
 
+    if (user.searching_category !== 'unset') {
+      const items: Laf[] =
+        await this.linebotLafService.getLafItemInThePastWeekByCategory(
+          user.searching_category,
+        );
+    }
     // TODO: ここで一緒に直近の落とし物があれば一緒に返す
     return client.replyMessage(replyToken, {
       type: 'text',

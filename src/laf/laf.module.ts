@@ -7,10 +7,17 @@ import { UserService } from 'src/user/user.service';
 import { LafController } from './laf.controller';
 import { Laf } from './laf.entity';
 import { LafService } from './laf.service';
+import { LinebotLafService } from './linebot-laf.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Laf, User])],
-  providers: [LafService, LinebotService, LinebotConfigService, UserService],
+  providers: [
+    LafService,
+    LinebotService,
+    LinebotConfigService,
+    UserService,
+    LinebotLafService,
+  ],
   controllers: [LafController],
 })
 export class LafModule {}

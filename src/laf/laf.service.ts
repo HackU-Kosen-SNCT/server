@@ -40,7 +40,7 @@ export class LafService {
       item.category,
     );
     const userIds: string[] = result.map((r) => r.registrant);
-    this.linebotService.sendLafItemToLinebot(userIds);
+    this.linebotService.sendLafItemToLinebot(userIds, item);
 
     return item;
   }
