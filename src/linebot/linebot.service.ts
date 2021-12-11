@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Client, FlexMessage, PostbackEvent } from '@line/bot-sdk';
+import { Client, FlexBubble, FlexMessage, PostbackEvent } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
@@ -45,18 +45,21 @@ export class LinebotService {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
     if (userIds.length === 0) return;
-    return client.multicast(userIds, this.sendFlexMessage_test());
+    return client.multicast(userIds, [
+      {
+        type: 'text',
+        text: '新着の落とし物があります',
+      },
+      this.createFlexMessage([item]),
+    ]);
   }
 
   // send to linebot laf items
   // ユーザーがこれを落としたと登録したときに直近に登録された落とし物を送信する
-  sendLafItemsToLinebot(userId: string) {
+  sendLafItemsToLinebot(userId: string, items: Laf[]) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
-    return client.pushMessage(userId, {
-      type: 'text',
-      text: 'hello',
-    });
+    return client.pushMessage(userId, this.createFlexMessage(items));
   }
 
   // 感謝のメッセージを送信する
@@ -135,97 +138,53 @@ export class LinebotService {
     await client.createRichMenu(richMenu);
   }
 
-  sendFlexMessage_test() {
-    const client = new Client(this.linebotConfigService.createLinebotOptions());
+  createFlexMessage(items: Laf[]) {
     const flexMessage: FlexMessage = {
       type: 'flex',
       altText: 'This is a Flex Message',
       contents: {
         type: 'carousel',
+        contents: items.map((item) => this.createFlexBubble(item)),
+      },
+    };
+    return flexMessage;
+  }
+
+  createFlexBubble(item: Laf): FlexBubble {
+    const flexBubble: FlexBubble = {
+      type: 'bubble',
+      size: 'micro',
+      hero: {
+        type: 'image',
+        url: item.image_url,
+        size: 'xxl',
+        margin: 'none',
+        position: 'relative',
+        flex: 1,
+        backgroundColor: '#000000',
+        aspectMode: 'cover',
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
         contents: [
           {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'xxl',
-              margin: 'none',
-              position: 'relative',
-              flex: 1,
-              backgroundColor: '#000000',
-              aspectMode: 'cover',
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'カテゴリ',
-                  margin: 'none',
-                  weight: 'regular',
-                  position: 'relative',
-                  align: 'center',
-                },
-                {
-                  type: 'text',
-                  text: '時間',
-                  margin: 'md',
-                  size: 'xs',
-                },
-              ],
-            },
+            type: 'text',
+            text: CategoryConversion(item.category),
+            margin: 'none',
+            weight: 'regular',
+            position: 'relative',
+            align: 'center',
           },
           {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'full',
-              flex: 2,
-              position: 'relative',
-              aspectMode: 'cover',
-            },
-          },
-          {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'xxl',
-              margin: 'none',
-              position: 'relative',
-              flex: 1,
-              backgroundColor: '#000000',
-              aspectMode: 'cover',
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'カテゴリ',
-                  margin: 'none',
-                  weight: 'regular',
-                  position: 'relative',
-                  align: 'center',
-                },
-                {
-                  type: 'text',
-                  text: '時間',
-                  margin: 'md',
-                  size: 'xs',
-                },
-              ],
-            },
+            type: 'text',
+            text: String(item.created_at),
+            margin: 'md',
+            size: 'xs',
           },
         ],
       },
     };
-    return flexMessage;
+    return flexBubble;
   }
 }
