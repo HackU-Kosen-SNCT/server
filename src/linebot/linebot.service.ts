@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Client, PostbackEvent, RichMenu } from '@line/bot-sdk';
+import { Client, FlexMessage, PostbackEvent } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import type { TemplateMessage } from '@line/bot-sdk';
-import { UpdateQuickReply } from './linebot.data';
+import { richMenu, UpdateQuickReply } from './linebot.data';
 import { UserCategory } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import { CategoryConversion } from 'src/laf/laf.dto';
@@ -13,7 +13,6 @@ import { LinebotLafService } from 'src/laf/linebot-laf.service';
 
 @Injectable()
 export class LinebotService {
-  // lafRepository を定義しているのは渋々って感じ...
   constructor(
     private configService: ConfigService,
     private linebotConfigService: LinebotConfigService,
@@ -45,10 +44,8 @@ export class LinebotService {
   sendLafItemToLinebot(userIds: string[], item: Laf) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
-    return client.multicast(userIds, {
-      type: 'text',
-      text: 'hello',
-    });
+    if (userIds.length === 0) return;
+    return client.multicast(userIds, this.sendFlexMessage_test());
   }
 
   // send to linebot laf items
@@ -129,93 +126,18 @@ export class LinebotService {
   // リッチメニューの登録
   async SettingRichMenu() {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
-
-    const richMenu: RichMenu = {
-      size: {
-        width: 1200,
-        height: 405,
-      },
-      selected: true,
-      name: 'リッチメニュー 1',
-      chatBarText: 'メニュー一覧',
-      areas: [
-        {
-          bounds: {
-            x: 0,
-            y: 0,
-            width: 600,
-            height: 405,
-          },
-          action: {
-            type: 'uri',
-            uri: 'https://liff.line.me/1656701091-JxvpwXG2',
-          },
-        },
-        {
-          bounds: {
-            x: 600,
-            y: 0,
-            width: 600,
-            height: 405,
-          },
-          action: {
-            type: 'postback',
-            data: 'update',
-          },
-        },
-      ],
-    };
-
     const richMenuId = await client.createRichMenu(richMenu);
     await client.setRichMenuImage(
       richMenuId,
       fs.createReadStream('src/linebot/richmenu.png'),
     );
     await client.setDefaultRichMenu(richMenuId);
-
-    await client
-      .createRichMenu(richMenu)
-      .then((richMenuId: any) => console.log(richMenuId));
-  }
-
-  carouselMessage(): TemplateMessage {
-    const message: TemplateMessage = {
-      type: 'template',
-      altText: 'cannot display template message',
-      template: {
-        type: 'carousel',
-        columns: [
-          {
-            text: 'Hoge',
-            title: 'Fuga',
-            actions: [
-              {
-                type: 'uri',
-                label: 'See Wikipedia',
-                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
-              },
-            ],
-          },
-          {
-            text: 'foo',
-            title: 'bar',
-            actions: [
-              {
-                type: 'uri',
-                label: 'See Wikipedia',
-                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
-              },
-            ],
-          },
-        ],
-      },
-    };
-    return message;
+    await client.createRichMenu(richMenu);
   }
 
   sendFlexMessage_test() {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
-    return client.pushMessage(this.configService.get<string>('LINE_USER_ID'), {
+    const flexMessage: FlexMessage = {
       type: 'flex',
       altText: 'This is a Flex Message',
       contents: {
@@ -303,6 +225,7 @@ export class LinebotService {
           },
         ],
       },
-    });
+    };
+    return flexMessage;
   }
 }
