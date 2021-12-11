@@ -9,8 +9,15 @@ export class LinebotLafService {
   constructor(@InjectRepository(Laf) private lafRepository: Repository<Laf>) {}
 
   async getLafItemInThePastWeekByCategory(category: ItemCategory) {
-    return await this.lafRepository.find({
+    const items = await this.lafRepository.find({
       where: { category },
+    });
+    return items.filter((item) => {
+      return (
+        (new Date().getTime() - item.created_at.getTime()) /
+          (1000 * 60 * 60 * 24) <
+        7
+      );
     });
   }
 }

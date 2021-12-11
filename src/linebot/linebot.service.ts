@@ -121,8 +121,33 @@ export class LinebotService {
         await this.linebotLafService.getLafItemInThePastWeekByCategory(
           user.searching_category,
         );
+      if (items.length === 0) {
+        // ここ1週間、そのカテゴリのアイテムが届いていなかった時
+        return client.replyMessage(replyToken, [
+          {
+            type: 'text',
+            text: returnText,
+          },
+          {
+            type: 'text',
+            text: 'ここ1週間では落とし物は届いていません',
+          },
+        ]);
+      } else {
+        // ここ1週間で落とし物が届いている時
+        return client.replyMessage(replyToken, [
+          {
+            type: 'text',
+            text: returnText,
+          },
+          {
+            type: 'text',
+            text: `ここ1週間で${items.length}件の落とし物が届けられています`,
+          },
+          this.createFlexMessage(items),
+        ]);
+      }
     }
-    // TODO: ここで一緒に直近の落とし物があれば一緒に返す
     return client.replyMessage(replyToken, {
       type: 'text',
       text: returnText,
