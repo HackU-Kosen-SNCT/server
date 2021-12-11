@@ -3,7 +3,6 @@ import { Client, FlexBubble, FlexMessage, PostbackEvent } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
-import type { TemplateMessage } from '@line/bot-sdk';
 import { richMenu, UpdateQuickReply } from './linebot.data';
 import { UserCategory } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
@@ -71,6 +70,10 @@ export class LinebotService {
   ) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     return client.pushMessage(registrant, [
+      {
+        type: 'text',
+        text: 'この落とし物が持ち主の元へ戻りました',
+      },
       {
         type: 'image',
         originalContentUrl: imageUrl,
