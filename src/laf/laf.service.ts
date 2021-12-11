@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LinebotService } from 'src/linebot/linebot.service';
 import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreateLafItemDto, ReceiveDto, RegistrantDto } from './laf.dto';
 import { Laf } from './laf.entity';
@@ -12,10 +13,10 @@ export class LafService {
     @InjectRepository(Laf) private lafRepository: Repository<Laf>,
     @InjectRepository(User) private userRepository: Repository<User>,
     private linebotService: LinebotService,
+    private userService: UserService,
   ) {}
 
   async getLafItems(): Promise<Laf[]> {
-    this.linebotService.sendLafItemToLinebot('Hello World!');
     return await this.lafRepository.find();
   }
 
@@ -31,8 +32,16 @@ export class LafService {
     }
 
     const item = new Laf(item_id, category, image_url, created_at, detail);
-
     await this.lafRepository.save(item);
+
+    // LINEBotへの送信処理
+    // searching_categoryがitem.categoryの人のuserIdを取得
+    const result = await this.userService.userIdsToFindThatCategory(
+      item.category,
+    );
+    const userIds: string[] = result.map((r) => r.registrant);
+    this.linebotService.sendLafItemToLinebot(userIds);
+
     return item;
   }
 
@@ -67,7 +76,12 @@ export class LafService {
 
     await this.lafRepository.save(item);
     // LINEに送信処理
-    this.linebotService.sendTheMessageOfThanks(message, item.registrant);
+    // TODO: imageUrlを変数に置き換える
+    this.linebotService.sendTheMessageOfThanks(
+      message,
+      item.registrant,
+      'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+    );
     return item;
   }
 }

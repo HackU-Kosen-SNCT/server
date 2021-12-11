@@ -9,13 +9,53 @@ export type ItemCategory =
   | 'stationery'
   | 'key'
   | 'usb'
-  | 'textbook'
-  | 'notebook/file'
+  | 'textbook/notebook/file'
   | 'earphone'
   | 'calculator'
   | 'umbrella'
   | 'clothing'
   | 'others';
+
+export function CategoryConversion(category: ItemCategory) {
+  switch (category) {
+    case 'wallet':
+      return '財布';
+      break;
+    case 'smartPhone':
+      return 'スマホ';
+      break;
+    case 'waterBottle':
+      return '水筒';
+      break;
+    case 'stationery':
+      return '文房具';
+      break;
+    case 'key':
+      return '鍵';
+      break;
+    case 'usb':
+      return 'USBメモリ';
+      break;
+    case 'textbook/notebook/file':
+      return '教科書・ノート・ファイル';
+      break;
+    case 'earphone':
+      return 'イヤホン';
+      break;
+    case 'calculator':
+      return '電卓';
+      break;
+    case 'umbrella':
+      return '傘';
+      break;
+    case 'clothing':
+      return '衣料品';
+      break;
+    case 'others':
+      return 'その他';
+      break;
+  }
+}
 
 export class LafItem {
   @ApiProperty()
