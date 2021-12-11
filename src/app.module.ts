@@ -1,5 +1,5 @@
-import { Module , MiddlewareConsumer , NestModule} from '@nestjs/common';
-import { ConfigModule , ConfigService} from '@nestjs/config';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { LafModule } from './laf/laf.module';

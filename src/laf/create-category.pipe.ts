@@ -2,10 +2,23 @@ import { BadRequestException, PipeTransform } from '@nestjs/common';
 import { CreateLafItemDto } from './laf.dto';
 
 export class CreateCategoryPipe implements PipeTransform {
-  readonly allowCategories = ['valuables', 'stationary', 'clothing', 'others'];
+  readonly allowCategories = [
+    'wallet',
+    'smartPhone',
+    'waterBottle',
+    'stationery',
+    'key',
+    'usb',
+    'textbook/notebook/file',
+    'earphone',
+    'calculator',
+    'umbrella',
+    'clothing',
+    'others',
+  ];
 
   transform(value: CreateLafItemDto) {
-    const category = value.category.toLowerCase();
+    const category = value.category;
 
     if (!this.isCategoryValid(category)) {
       throw new BadRequestException(

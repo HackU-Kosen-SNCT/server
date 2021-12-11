@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Client, PostbackEvent, RichMenu } from '@line/bot-sdk';
+import { Client, FlexBubble, FlexMessage, PostbackEvent } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
-import type { TemplateMessage } from '@line/bot-sdk';
-import { UpdateQuickReply } from './linebot.data';
+import { richMenu, UpdateQuickReply } from './linebot.data';
 import { UserCategory } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import { CategoryConversion } from 'src/laf/laf.dto';
+import { Laf } from 'src/laf/laf.entity';
+import { LinebotLafService } from 'src/laf/linebot-laf.service';
 
 @Injectable()
 export class LinebotService {
@@ -15,6 +16,7 @@ export class LinebotService {
     private configService: ConfigService,
     private linebotConfigService: LinebotConfigService,
     private userService: UserService,
+    private linebotLafService: LinebotLafService,
   ) {}
 
   postBackHandler(event: PostbackEvent) {
@@ -37,24 +39,26 @@ export class LinebotService {
 
   // send to linebot laf item
   // 落とし物が登録された時にLINEBotへメッセージを送信する
-  sendLafItemToLinebot(userIds: string[]) {
+  // searching_category === postされたcategoryの人全員に送る
+  sendLafItemToLinebot(userIds: string[], item: Laf) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
-    return client.multicast(userIds, {
-      type: 'text',
-      text: 'hello',
-    });
+    if (userIds.length === 0) return;
+    return client.multicast(userIds, [
+      {
+        type: 'text',
+        text: '新着の落とし物があります',
+      },
+      this.createFlexMessage([item]),
+    ]);
   }
 
   // send to linebot laf items
   // ユーザーがこれを落としたと登録したときに直近に登録された落とし物を送信する
-  sendLafItemsToLinebot(userId: string) {
+  sendLafItemsToLinebot(userId: string, items: Laf[]) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     // TODO: textではなくflex message返すように修正
-    return client.pushMessage(userId, {
-      type: 'text',
-      text: 'hello',
-    });
+    return client.pushMessage(userId, this.createFlexMessage(items));
   }
 
   // 感謝のメッセージを送信する
@@ -66,6 +70,10 @@ export class LinebotService {
   ) {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     return client.pushMessage(registrant, [
+      {
+        type: 'text',
+        text: 'この落とし物が持ち主の元へ戻りました',
+      },
       {
         type: 'image',
         originalContentUrl: imageUrl,
@@ -108,7 +116,38 @@ export class LinebotService {
             user.searching_category,
           )}を落とした物として登録しました。`;
 
-    // TODO: ここで一緒に直近の落とし物があれば一緒に返す
+    if (user.searching_category !== 'unset') {
+      const items: Laf[] =
+        await this.linebotLafService.getLafItemInThePastWeekByCategory(
+          user.searching_category,
+        );
+      if (items.length === 0) {
+        // ここ1週間、そのカテゴリのアイテムが届いていなかった時
+        return client.replyMessage(replyToken, [
+          {
+            type: 'text',
+            text: returnText,
+          },
+          {
+            type: 'text',
+            text: 'ここ1週間では落とし物は届いていません',
+          },
+        ]);
+      } else {
+        // ここ1週間で落とし物が届いている時
+        return client.replyMessage(replyToken, [
+          {
+            type: 'text',
+            text: returnText,
+          },
+          {
+            type: 'text',
+            text: `ここ1週間で${items.length}件の落とし物が届けられています`,
+          },
+          this.createFlexMessage(items),
+        ]);
+      }
+    }
     return client.replyMessage(replyToken, {
       type: 'text',
       text: returnText,
@@ -118,180 +157,62 @@ export class LinebotService {
   // リッチメニューの登録
   async SettingRichMenu() {
     const client = new Client(this.linebotConfigService.createLinebotOptions());
-
-    const richMenu: RichMenu = {
-      size: {
-        width: 1200,
-        height: 405,
-      },
-      selected: true,
-      name: 'リッチメニュー 1',
-      chatBarText: 'メニュー一覧',
-      areas: [
-        {
-          bounds: {
-            x: 0,
-            y: 0,
-            width: 600,
-            height: 405,
-          },
-          action: {
-            type: 'uri',
-            uri: 'https://liff.line.me/1656701091-JxvpwXG2',
-          },
-        },
-        {
-          bounds: {
-            x: 600,
-            y: 0,
-            width: 600,
-            height: 405,
-          },
-          action: {
-            type: 'postback',
-            data: 'update',
-          },
-        },
-      ],
-    };
-
     const richMenuId = await client.createRichMenu(richMenu);
     await client.setRichMenuImage(
       richMenuId,
       fs.createReadStream('src/linebot/richmenu.png'),
     );
     await client.setDefaultRichMenu(richMenuId);
-
-    await client
-      .createRichMenu(richMenu)
-      .then((richMenuId: any) => console.log(richMenuId));
+    await client.createRichMenu(richMenu);
   }
 
-  carouselMessage(): TemplateMessage {
-    const message: TemplateMessage = {
-      type: 'template',
-      altText: 'cannot display template message',
-      template: {
-        type: 'carousel',
-        columns: [
-          {
-            text: 'Hoge',
-            title: 'Fuga',
-            actions: [
-              {
-                type: 'uri',
-                label: 'See Wikipedia',
-                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
-              },
-            ],
-          },
-          {
-            text: 'foo',
-            title: 'bar',
-            actions: [
-              {
-                type: 'uri',
-                label: 'See Wikipedia',
-                uri: 'https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%BF%E6%A7%8B%E6%96%87%E5%A4%89%E6%95%B0',
-              },
-            ],
-          },
-        ],
-      },
-    };
-    return message;
-  }
-
-  sendFlexMessage_test() {
-    const client = new Client(this.linebotConfigService.createLinebotOptions());
-    return client.pushMessage(this.configService.get<string>('LINE_USER_ID'), {
+  createFlexMessage(items: Laf[]) {
+    const flexMessage: FlexMessage = {
       type: 'flex',
       altText: 'This is a Flex Message',
       contents: {
         type: 'carousel',
+        contents: items.map((item) => this.createFlexBubble(item)),
+      },
+    };
+    return flexMessage;
+  }
+
+  createFlexBubble(item: Laf): FlexBubble {
+    const flexBubble: FlexBubble = {
+      type: 'bubble',
+      size: 'micro',
+      hero: {
+        type: 'image',
+        url: item.image_url,
+        size: 'xxl',
+        margin: 'none',
+        position: 'relative',
+        flex: 1,
+        backgroundColor: '#000000',
+        aspectMode: 'cover',
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
         contents: [
           {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'xxl',
-              margin: 'none',
-              position: 'relative',
-              flex: 1,
-              backgroundColor: '#000000',
-              aspectMode: 'cover',
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'カテゴリ',
-                  margin: 'none',
-                  weight: 'regular',
-                  position: 'relative',
-                  align: 'center',
-                },
-                {
-                  type: 'text',
-                  text: '時間',
-                  margin: 'md',
-                  size: 'xs',
-                },
-              ],
-            },
+            type: 'text',
+            text: CategoryConversion(item.category),
+            margin: 'none',
+            weight: 'regular',
+            position: 'relative',
+            align: 'center',
           },
           {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'full',
-              flex: 2,
-              position: 'relative',
-              aspectMode: 'cover',
-            },
-          },
-          {
-            type: 'bubble',
-            size: 'micro',
-            hero: {
-              type: 'image',
-              url: 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png',
-              size: 'xxl',
-              margin: 'none',
-              position: 'relative',
-              flex: 1,
-              backgroundColor: '#000000',
-              aspectMode: 'cover',
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [
-                {
-                  type: 'text',
-                  text: 'カテゴリ',
-                  margin: 'none',
-                  weight: 'regular',
-                  position: 'relative',
-                  align: 'center',
-                },
-                {
-                  type: 'text',
-                  text: '時間',
-                  margin: 'md',
-                  size: 'xs',
-                },
-              ],
-            },
+            type: 'text',
+            text: String(item.created_at),
+            margin: 'md',
+            size: 'xs',
           },
         ],
       },
-    });
+    };
+    return flexBubble;
   }
 }

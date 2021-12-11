@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { WebhookEvent, WebhookRequestBody } from '@line/bot-sdk';
 import { LinebotConfigService } from 'src/config/linebot-config.service';
 import { UserService } from 'src/user/user.service';
-import * as crypto from 'crypto';
 
 @Controller('linebot')
 export class LinebotController {
@@ -36,16 +35,5 @@ export class LinebotController {
           break;
       }
     });
-  }
-
-  @Post('/flex')
-  sendFlex(): any {
-    return this.linebotService.sendFlexMessage_test();
-  }
-
-  @Post('/test')
-  getEvent(@Body() body: any) {
-    console.log(body);
-    return this.linebotService.SettingRichMenu();
   }
 }

@@ -40,7 +40,7 @@ export class LafService {
       item.category,
     );
     const userIds: string[] = result.map((r) => r.registrant);
-    this.linebotService.sendLafItemToLinebot(userIds);
+    this.linebotService.sendLafItemToLinebot(userIds, item);
 
     return item;
   }
@@ -76,11 +76,10 @@ export class LafService {
 
     await this.lafRepository.save(item);
     // LINEに送信処理
-    // TODO: imageUrlを変数に置き換える
     this.linebotService.sendTheMessageOfThanks(
       message,
       item.registrant,
-      'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
+      item.image_url,
     );
     return item;
   }

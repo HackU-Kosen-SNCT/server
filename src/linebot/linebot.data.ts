@@ -1,4 +1,4 @@
-import { QuickReplyItem } from '@line/bot-sdk';
+import { QuickReplyItem, RichMenu } from '@line/bot-sdk';
 
 export const UpdateQuickReply: QuickReplyItem[] = [
   {
@@ -119,3 +119,39 @@ export const UpdateQuickReply: QuickReplyItem[] = [
     },
   },
 ];
+
+export const richMenu: RichMenu = {
+  size: {
+    width: 1200,
+    height: 405,
+  },
+  selected: true,
+  name: 'リッチメニュー 1',
+  chatBarText: 'メニュー一覧',
+  areas: [
+    {
+      bounds: {
+        x: 0,
+        y: 0,
+        width: 600,
+        height: 405,
+      },
+      action: {
+        type: 'uri',
+        uri: 'https://liff.line.me/1656701091-JxvpwXG2',
+      },
+    },
+    {
+      bounds: {
+        x: 600,
+        y: 0,
+        width: 600,
+        height: 405,
+      },
+      action: {
+        type: 'postback',
+        data: 'update',
+      },
+    },
+  ],
+};
