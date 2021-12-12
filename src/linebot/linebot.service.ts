@@ -169,7 +169,7 @@ export class LinebotService {
   createFlexMessage(items: Laf[]) {
     const flexMessage: FlexMessage = {
       type: 'flex',
-      altText: 'This is a Flex Message',
+      altText: '画像一覧',
       contents: {
         type: 'carousel',
         contents: items.map((item) => this.createFlexBubble(item)),
@@ -215,4 +215,7 @@ export class LinebotService {
     };
     return flexBubble;
   }
+
+  
 }
+
