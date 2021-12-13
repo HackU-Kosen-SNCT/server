@@ -16,6 +16,23 @@ export type ItemCategory =
   | 'clothing'
   | 'others';
 
+// 登録時に設定できるカラータイプ
+export type ColorType =
+  | '#FFFFFF'
+  | '#02331B'
+  | '#999999'
+  | '#FF2323'
+  | '#FF3399'
+  | '#FF33FF'
+  | '#9933FF'
+  | '#3333FF'
+  | '#3399FF'
+  | '#33FFFF'
+  | '#33FF33'
+  | '#99FF33'
+  | '#FFFF33'
+  | '#FF9933';
+
 export function CategoryConversion(category: ItemCategory) {
   switch (category) {
     case 'wallet':
@@ -65,6 +82,9 @@ export class LafItem {
   category: ItemCategory;
 
   @ApiProperty()
+  color: ColorType;
+
+  @ApiProperty()
   detail: string | null;
 
   @ApiProperty()
@@ -84,6 +104,7 @@ export class GetLafItemsResponse {
       {
         item_id: '20211201152512300',
         category: 'others',
+        color: '#FFFFFF',
         detail: null,
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
@@ -92,6 +113,7 @@ export class GetLafItemsResponse {
       {
         item_id: '20211205170917500',
         category: 'clothing',
+        color: '#999999',
         detail: 'スポーツタオル',
         image_url:
           'https://pbs.twimg.com/profile_images/1425448503010988032/p8GuVmXX_400x400.jpg',
@@ -108,6 +130,9 @@ export class PostLafItemResponse {
 
   @ApiProperty({ type: String, example: 'clothing' })
   category: string;
+
+  @ApiProperty({ type: String, example: '#FF33FF' })
+  color: string;
 
   @ApiProperty({ type: String, example: 'スポーツタオル' })
   detail: string;
@@ -131,6 +156,10 @@ export class CreateLafItemDto {
   @ApiProperty({ example: 'clothing' })
   @IsNotEmpty()
   category: ItemCategory;
+
+  @ApiProperty({ example: '#FF33FF' })
+  @IsNotEmpty()
+  color: ColorType;
 
   @ApiProperty({ required: false, example: 'スポーツタオル' })
   detail: string;

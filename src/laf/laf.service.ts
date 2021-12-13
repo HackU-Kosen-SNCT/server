@@ -21,7 +21,7 @@ export class LafService {
   }
 
   async createLafItem(createLafItemDto: CreateLafItemDto): Promise<Laf> {
-    const { item_id, category, image_url, created_at, detail } =
+    const { item_id, category, color, image_url, created_at, detail } =
       createLafItemDto;
 
     // 既にitem_idが同じものがあるかどうか
@@ -31,7 +31,14 @@ export class LafService {
       return;
     }
 
-    const item = new Laf(item_id, category, image_url, created_at, detail);
+    const item = new Laf(
+      item_id,
+      category,
+      color,
+      image_url,
+      created_at,
+      detail,
+    );
     await this.lafRepository.save(item);
 
     // LINEBotへの送信処理
