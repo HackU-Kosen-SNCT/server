@@ -43,13 +43,14 @@ export class LafController {
   @ApiInternalServerErrorResponse({
     description: 'サーバー側エラー時のレスポンス',
   })
-  async getLafItems(): Promise<LafItem[]> {
+  async getLafItems(): Promise<GetLafItemsResponse> {
     const items = await this.lafService.getLafItems();
-    return items.map((item) => {
+    items.map((item) => {
       delete item.message;
       delete item.registrant;
       return item;
     });
+    return { items: items };
   }
 
   @Post()
