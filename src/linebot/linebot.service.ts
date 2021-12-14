@@ -185,16 +185,18 @@ export class LinebotService {
       hero: {
         type: 'image',
         url: item.image_url,
-        size: 'xxl',
+        size: 'full',
         margin: 'none',
         position: 'relative',
         flex: 1,
         backgroundColor: '#000000',
         aspectMode: 'cover',
+        //画像のアスペクト比　デフォルトは1:1
+        aspectRatio: "1.4:1"
       },
       body: {
         type: 'box',
-        layout: 'vertical',
+        layout: 'baseline',
         contents: [
           {
             type: 'text',
@@ -205,17 +207,30 @@ export class LinebotService {
             align: 'center',
           },
           {
-            type: 'text',
-            text: String(item.created_at),
-            margin: 'md',
-            size: 'xs',
+            type: "icon",
+            //アイコンのURL
+            url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
           },
         ],
+        spacing: "none"
       },
+      footer: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          {
+            type: "text",
+            //ここのtextを説明文に置き換える
+            text: "This is test text This is test text This is test text This is test text",
+            wrap: true,
+            //表示する最大行数
+            maxLines: 4,
+            size: "xs",
+          },
+        ],
+      }
     };
     return flexBubble;
   }
-
-  
 }
 
