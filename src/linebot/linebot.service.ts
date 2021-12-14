@@ -215,8 +215,7 @@ export class LinebotService {
         contents: [
           {
             type: "text",
-            //ここのtextを説明文に置き換える
-            text: "This is test text",
+            text: item.detail,
             wrap: true,
             //表示する最大行数
             maxLines: 4,
