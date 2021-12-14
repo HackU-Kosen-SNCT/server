@@ -206,11 +206,6 @@ export class LinebotService {
             position: 'relative',
             align: 'center',
           },
-          {
-            type: "icon",
-            //アイコンのURL
-            url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-          },
         ],
         spacing: "none"
       },
