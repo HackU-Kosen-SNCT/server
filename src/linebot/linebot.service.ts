@@ -184,7 +184,8 @@ export class LinebotService {
       size: 'micro',
       hero: {
         type: 'image',
-        url: item.image_url,
+        //url: item.image_url,
+        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
         size: 'full',
         margin: 'none',
         position: 'relative',
@@ -200,7 +201,8 @@ export class LinebotService {
         contents: [
           {
             type: 'text',
-            text: CategoryConversion(item.category),
+            //text: CategoryConversion(item.category),
+            text: "テスト",
             margin: 'none',
             weight: 'regular',
             position: 'relative',
