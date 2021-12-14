@@ -11,8 +11,8 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    ports:
-      - 3000:3001
+    expose:
+      - 3001
     command: sh -c 'yarn install && NODE_ENV=production yarn start:prod'
 
   database:
@@ -25,8 +25,8 @@ services:
       - ./sql:/sql
       - ./my.cnf:/etc/mysql/my.cnf
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    ports:
-      - 3360:3306
+    expose:
+      - 3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=app
