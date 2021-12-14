@@ -9,6 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { CategoryConversion } from 'src/laf/laf.dto';
 import { Laf } from 'src/laf/laf.entity';
 import { LinebotLafService } from 'src/laf/linebot-laf.service';
+import { text } from 'stream/consumers';
 
 @Injectable()
 export class LinebotService {
@@ -169,7 +170,7 @@ export class LinebotService {
   createFlexMessage(items: Laf[]) {
     const flexMessage: FlexMessage = {
       type: 'flex',
-      altText: 'This is a Flex Message',
+      altText: '画像一覧',
       contents: {
         type: 'carousel',
         contents: items.map((item) => this.createFlexBubble(item)),
@@ -185,16 +186,18 @@ export class LinebotService {
       hero: {
         type: 'image',
         url: item.image_url,
-        size: 'xxl',
+        size: 'full',
         margin: 'none',
         position: 'relative',
         flex: 1,
         backgroundColor: '#000000',
         aspectMode: 'cover',
+        //画像のアスペクト比　デフォルトは1:1
+        aspectRatio: "1.4:1"
       },
       body: {
         type: 'box',
-        layout: 'vertical',
+        layout: 'baseline',
         contents: [
           {
             type: 'text',
@@ -204,15 +207,25 @@ export class LinebotService {
             position: 'relative',
             align: 'center',
           },
-          {
-            type: 'text',
-            text: String(item.created_at),
-            margin: 'md',
-            size: 'xs',
-          },
         ],
       },
+      footer: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          {
+            type: "text",
+            text: item.detail,
+            wrap: true,
+            //表示する最大行数
+            maxLines: 4,
+            size: "xs",
+          },
+        ],
+      }
     };
     return flexBubble;
   }
+
 }
+
