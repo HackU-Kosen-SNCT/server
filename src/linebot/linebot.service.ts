@@ -9,6 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { CategoryConversion } from 'src/laf/laf.dto';
 import { Laf } from 'src/laf/laf.entity';
 import { LinebotLafService } from 'src/laf/linebot-laf.service';
+import { text } from 'stream/consumers';
 
 @Injectable()
 export class LinebotService {
@@ -184,8 +185,7 @@ export class LinebotService {
       size: 'micro',
       hero: {
         type: 'image',
-        //url: item.image_url,
-        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+        url: item.image_url,
         size: 'full',
         margin: 'none',
         position: 'relative',
@@ -201,15 +201,13 @@ export class LinebotService {
         contents: [
           {
             type: 'text',
-            //text: CategoryConversion(item.category),
-            text: "テスト",
+            text: CategoryConversion(item.category),
             margin: 'none',
             weight: 'regular',
             position: 'relative',
             align: 'center',
           },
         ],
-        spacing: "none"
       },
       footer: {
         type: "box",
@@ -218,7 +216,7 @@ export class LinebotService {
           {
             type: "text",
             //ここのtextを説明文に置き換える
-            text: "This is test text This is test text This is test text This is test text",
+            text: "This is test text",
             wrap: true,
             //表示する最大行数
             maxLines: 4,
@@ -229,5 +227,6 @@ export class LinebotService {
     };
     return flexBubble;
   }
+
 }
 
