@@ -13,7 +13,7 @@ services:
       - /usr/src/app/node_modules
     expose:
       - 3001
-    command: sh -c 'yarn install && NODE_ENV=production yarn start:prod'
+    command: sh -c 'yarn install && yarn build && NODE_ENV=production yarn start:prod'
 
   database:
     container_name: database
