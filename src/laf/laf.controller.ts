@@ -19,7 +19,7 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { CreateCategoryPipe } from './create-category.pipe';
+import { CreatePipe } from './create.pipe';
 import {
   GetLafItemsResponse,
   LafItem,
@@ -43,13 +43,14 @@ export class LafController {
   @ApiInternalServerErrorResponse({
     description: 'サーバー側エラー時のレスポンス',
   })
-  async getLafItems(): Promise<LafItem[]> {
+  async getLafItems(): Promise<GetLafItemsResponse> {
     const items = await this.lafService.getLafItems();
-    return items.map((item) => {
+    items.map((item) => {
       delete item.message;
       delete item.registrant;
       return item;
     });
+    return { items: items };
   }
 
   @Post()
@@ -65,7 +66,7 @@ export class LafController {
   })
   @UsePipes(new ValidationPipe({ transform: true }))
   async createLafItem(
-    @Body(CreateCategoryPipe) createLafItemDto: CreateLafItemDto,
+    @Body(CreatePipe) createLafItemDto: CreateLafItemDto,
   ): Promise<LafItem> {
     const item = await this.lafService.createLafItem(createLafItemDto);
     if (!item) {
