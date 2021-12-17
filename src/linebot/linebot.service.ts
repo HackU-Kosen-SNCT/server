@@ -214,16 +214,18 @@ export class LinebotService {
       footer: {
         type: 'box',
         layout: 'vertical',
-        contents: [
-          {
-            type: 'text',
-            text: item.detail,
-            wrap: true,
-            //表示する最大行数
-            maxLines: 4,
-            size: 'xs',
-          },
-        ],
+        contents: item.detail
+          ? [
+              {
+                type: 'text',
+                text: item.detail, // detailはnullの場合あり
+                wrap: true,
+                //表示する最大行数
+                maxLines: 4,
+                size: 'xs',
+              },
+            ]
+          : [],
       },
     };
     return flexBubble;
