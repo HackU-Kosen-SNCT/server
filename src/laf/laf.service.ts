@@ -83,11 +83,13 @@ export class LafService {
 
     await this.lafRepository.save(item);
     // LINEに送信処理
-    this.linebotService.sendTheMessageOfThanks(
-      message,
-      item.registrant,
-      item.image_url,
-    );
+    if (item.registrant) {
+      this.linebotService.sendTheMessageOfThanks(
+        message,
+        item.registrant,
+        item.image_url,
+      );
+    }
     return item;
   }
 }
