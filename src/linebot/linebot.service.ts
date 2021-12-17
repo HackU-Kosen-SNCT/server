@@ -193,7 +193,7 @@ export class LinebotService {
         backgroundColor: '#000000',
         aspectMode: 'cover',
         //画像のアスペクト比　デフォルトは1:1
-        aspectRatio: "1.4:1"
+        aspectRatio: '1.4:1',
       },
       body: {
         type: 'box',
@@ -210,22 +210,20 @@ export class LinebotService {
         ],
       },
       footer: {
-        type: "box",
-        layout: "vertical",
+        type: 'box',
+        layout: 'vertical',
         contents: [
           {
-            type: "text",
+            type: 'text',
             text: item.detail,
             wrap: true,
             //表示する最大行数
             maxLines: 4,
-            size: "xs",
+            size: 'xs',
           },
         ],
-      }
+      },
     };
     return flexBubble;
   }
-
 }
-
