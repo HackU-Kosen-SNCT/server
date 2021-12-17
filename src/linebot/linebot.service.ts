@@ -109,6 +109,8 @@ export class LinebotService {
       registrant,
       searching_category,
     });
+    // userが見つからなかった場合
+    if (!user) return;
     const client = new Client(this.linebotConfigService.createLinebotOptions());
     const returnText =
       user.searching_category === 'unset'
