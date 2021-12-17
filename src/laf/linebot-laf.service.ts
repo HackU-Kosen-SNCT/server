@@ -8,16 +8,22 @@ import { Laf } from './laf.entity';
 export class LinebotLafService {
   constructor(@InjectRepository(Laf) private lafRepository: Repository<Laf>) {}
 
-  async getLafItemInThePastWeekByCategory(category: ItemCategory) {
+  async getLafItemInThePastWeekByCategory(
+    category: ItemCategory,
+  ): Promise<Laf[]> {
     const items = await this.lafRepository.find({
       where: { category },
     });
-    return items.filter((item) => {
-      return (
-        (new Date().getTime() - item.created_at.getTime()) /
-          (1000 * 60 * 60 * 24) <
-        7
-      );
-    });
+    if (items) {
+      return items.filter((item) => {
+        return (
+          (new Date().getTime() - item.created_at.getTime()) /
+            (1000 * 60 * 60 * 24) <
+          7
+        );
+      });
+    } else {
+      return [];
+    }
   }
 }
