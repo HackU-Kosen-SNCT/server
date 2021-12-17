@@ -11,7 +11,6 @@ import { LinebotController } from './linebot/linebot.controller';
 import bodyParser = require('body-parser');
 import { LinebotConfigService } from './config/linebot-config.service';
 import { LafController } from './laf/laf.controller';
-import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -38,6 +37,6 @@ export class AppModule implements NestModule {
     consumer
       .apply(LineMiddleware(this.linebotConfigService.createLinebotOptions()))
       .forRoutes(LinebotController);
-    consumer.apply(bodyParser.json()).forRoutes(LafController, UserController);
+    consumer.apply(bodyParser.json()).forRoutes(LafController);
   }
 }
